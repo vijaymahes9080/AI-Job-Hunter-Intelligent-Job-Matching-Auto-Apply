@@ -1,0 +1,13 @@
+{
+  "name": "vijaymahes9080/ai-job-hunter",
+  "description": "AI Job Hunter - Intelligent Job Matching & Auto Apply SaaS Platform",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Vijay Mahes",
+      "email": "Vijaypradhap2004@gmail.com"
+    }
+  ],
+  "require": {}
+}
