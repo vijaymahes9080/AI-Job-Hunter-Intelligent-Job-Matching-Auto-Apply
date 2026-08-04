@@ -151,7 +151,7 @@ Aggregates job listings in real-time from 9 top job portals & ATS platforms:
 
 The application is configured for 1-click automated build & deployment via GitHub Actions:
 
-- **Live Demo Site**: [https://vijaymahes9080.github.io/AI-Job-Hunter/](https://vijaymahes9080.github.io/AI-Job-Hunter/)
+- **Live Demo Site**: [https://vijaymahes9080.github.io/AI-Job-Hunter-Intelligent-Job-Matching-Auto-Apply/](https://vijaymahes9080.github.io/AI-Job-Hunter-Intelligent-Job-Matching-Auto-Apply/)
 
 ### Enabling GitHub Pages in 1 Step:
 1. Go to your repository settings on GitHub: **Settings -> Pages**.
@@ -234,7 +234,7 @@ AI-Job-Hunter/
 
 **Vijay Mahes**
 - **GitHub**: [@vijaymahes9080](https://github.com/vijaymahes9080)
-- **Repository**: [https://github.com/vijaymahes9080/AI-Job-Hunter.git](https://github.com/vijaymahes9080/AI-Job-Hunter.git)
+- **Repository**: [https://github.com/vijaymahes9080/AI-Job-Hunter-Intelligent-Job-Matching-Auto-Apply.git](https://github.com/vijaymahes9080/AI-Job-Hunter-Intelligent-Job-Matching-Auto-Apply.git)
 - **Email**: [Vijaypradhap2004@gmail.com](mailto:Vijaypradhap2004@gmail.com)
 
 ---
