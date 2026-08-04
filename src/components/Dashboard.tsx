@@ -56,7 +56,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
                 AI Match Engine Active
               </span>
-              <span className="text-xs text-slate-400 font-medium">Synced with LinkedIn OAuth</span>
+              <span className="text-xs text-slate-400 font-medium">Real-Time OAuth Connected</span>
               {simpleMode && (
                 <span className="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
                   ✨ Simple Mode Active

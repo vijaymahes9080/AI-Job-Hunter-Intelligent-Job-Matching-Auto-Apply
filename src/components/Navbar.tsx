@@ -314,8 +314,8 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="flex items-center gap-1.5">
                 <span className="text-xs font-bold text-slate-200 leading-none">{profile.name}</span>
               </div>
-              <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5">
-                LinkedIn OAuth
+              <span className="text-[10px] text-emerald-400 font-semibold flex items-center gap-1 mt-0.5 truncate max-w-[120px]">
+                {profile.email || 'Authenticated'}
               </span>
             </div>
           </div>
