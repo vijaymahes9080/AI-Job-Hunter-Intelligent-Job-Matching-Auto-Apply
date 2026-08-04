@@ -22,6 +22,7 @@ import { ChromeExtensionModal } from './components/ChromeExtensionModal';
 import { SalaryNegotiator } from './components/SalaryNegotiator';
 import { PortalConnectModal } from './components/PortalConnectModal';
 import { PassiveReviewDrawer } from './components/PassiveReviewDrawer';
+import { OfflineBanner } from './components/OfflineBanner';
 
 import type { Job, CandidateProfile, ApplicationItem, NotificationItem, AIModelConfig, ApplicationStatus, UserRole, SubscriptionTier, PortalAccount } from './types';
 import { DEFAULT_PORTAL_ACCOUNTS } from './data/mockData';
@@ -39,6 +40,8 @@ import {
   saveAIConfig 
 } from './services/storage';
 import { calculateJobMatch } from './services/aiMatchEngine';
+import { searchRealtimeJobs, deduplicateAndMerge } from './services/realtimeJobSearch';
+import { flushOfflineQueue, getQueueCount } from './services/offlineQueue';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<string>('dashboard');
@@ -65,7 +68,9 @@ export function App() {
 
   const [autoPilotActive, setAutoPilotActive] = useState<boolean>(true);
 
-  // Initialize and compute AI match scores for jobs on profile change
+  const [queueCount, setQueueCount] = useState<number>(getQueueCount());
+
+  // Initialize jobs and fetch live API feeds on mount / profile change
   useEffect(() => {
     const rawJobs = loadJobs();
     const scoredJobs = rawJobs.map(job => ({
@@ -74,7 +79,89 @@ export function App() {
     })).sort((a, b) => (b.matchScore?.overallPercentage || 0) - (a.matchScore?.overallPercentage || 0));
 
     setJobs(scoredJobs);
+
+    // Fetch real-time jobs from API proxy
+    if (navigator.onLine) {
+      searchRealtimeJobs(profile, { keywords: profile.headline || 'Software Engineer', location: profile.location || 'Remote', portals: [] })
+        .then(liveJobs => {
+          if (liveJobs.length > 0) {
+            const scoredLive = liveJobs.map(j => ({ ...j, matchScore: calculateJobMatch(profile, j) }));
+            setJobs(prev => {
+              const merged = deduplicateAndMerge(prev, scoredLive);
+              saveJobs(merged);
+              return merged;
+            });
+          }
+        })
+        .catch(console.error);
+    }
   }, [profile]);
+
+  // Real-time 5-minute background polling engine
+  useEffect(() => {
+    const POLL_INTERVAL = 5 * 60 * 1000;
+    const interval = setInterval(async () => {
+      if (navigator.onLine && autoPilotActive) {
+        try {
+          const fresh = await searchRealtimeJobs(profile, { keywords: profile.headline || 'Software Engineer', location: profile.location || 'Remote', portals: [] });
+          if (fresh.length > 0) {
+            const scored = fresh.map(j => ({ ...j, matchScore: calculateJobMatch(profile, j) }));
+            setJobs(prev => {
+              const merged = deduplicateAndMerge(prev, scored);
+              saveJobs(merged);
+              return merged;
+            });
+          }
+        } catch (e) {
+          console.warn('[Background Poll] Failed:', e);
+        }
+      }
+    }, POLL_INTERVAL);
+
+    return () => clearInterval(interval);
+  }, [autoPilotActive, profile]);
+
+  // SSE (Server-Sent Events) live job match stream listener
+  useEffect(() => {
+    if (typeof window === 'undefined' || !navigator.onLine) return;
+    let es: EventSource | null = null;
+    try {
+      es = new EventSource('/api/jobs/stream');
+      es.onmessage = (e) => {
+        try {
+          const payload = JSON.parse(e.data);
+          if (payload.type === 'new_jobs' && Array.isArray(payload.jobs)) {
+            const scored = payload.jobs.map((j: Job) => ({ ...j, matchScore: calculateJobMatch(profile, j) }));
+            setJobs(prev => deduplicateAndMerge(prev, scored));
+          }
+        } catch {}
+      };
+    } catch {}
+    return () => {
+      es?.close();
+    };
+  }, [profile]);
+
+  // Flush offline queue when connection is restored
+  const handleRetryOfflineQueue = async () => {
+    const count = await flushOfflineQueue((item, success) => {
+      if (success) {
+        const notif: NotificationItem = {
+          id: `notif-offline-${Date.now()}`,
+          title: '⚡ Offline Application Synced',
+          message: `Queued application for ${item.jobTitle} at ${item.company} was transmitted to ${item.portal}.`,
+          type: 'status_change',
+          timestamp: 'Just now',
+          read: false
+        };
+        setNotifications(prev => [notif, ...prev]);
+      }
+    });
+    setQueueCount(getQueueCount());
+    if (count > 0) {
+      alert(`Successfully synced ${count} queued application(s) to live portals!`);
+    }
+  };
 
   // Autonomous Zero-Intervention Background Auto-Apply Engine
   useEffect(() => {
@@ -172,6 +259,9 @@ export function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-950 text-slate-100">
+      {/* Offline Status & Sync Banner */}
+      <OfflineBanner queueCount={queueCount} onRetryQueue={handleRetryOfflineQueue} />
+
       {/* Top Header Navbar */}
       <Navbar 
         activeTab={activeTab}

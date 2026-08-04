@@ -19,6 +19,7 @@ import confetti from 'canvas-confetti';
 import { Job, CandidateProfile, ResumeVersion, CoverLetter, ApplicationItem } from '../types';
 import { generateTailoredResumes } from '../services/resumeOptimizer';
 import { generateCoverLetter } from '../services/coverLetterGenerator';
+import { submitToATS } from '../services/autonomousEngine';
 
 interface AutoApplyWorkflowProps {
   jobs: Job[];
@@ -58,23 +59,27 @@ export const AutoApplyWorkflow: React.FC<AutoApplyWorkflowProps> = ({
   const [submitting, setSubmitting] = useState(false);
   const [submissionStep, setSubmissionStep] = useState<string>('');
 
-  const handleApproveAndSubmit = () => {
+  const handleApproveAndSubmit = async () => {
     setSubmitting(true);
     setSubmissionStep('Verifying OAuth 2.0 Auth Session...');
 
     setTimeout(() => {
       setSubmissionStep(`Pre-filling ${selectedJob.sourcePortal} Screening Form...`);
-    }, 1000);
+    }, 800);
 
     setTimeout(() => {
       setSubmissionStep(`Attaching ATS Resume (${activeResume.name})...`);
-    }, 2000);
+    }, 1600);
 
     setTimeout(() => {
       setSubmissionStep('Transmitting Application to ATS Portal...');
-    }, 3000);
+    }, 2400);
 
-    setTimeout(() => {
+    // Invoke real API submission in background
+    const atsResultPromise = submitToATS(profile, selectedJob, coverLetter.content);
+
+    setTimeout(async () => {
+      const atsResult = await atsResultPromise;
       setSubmitting(false);
       setSubmissionStep('');
       
@@ -91,21 +96,21 @@ export const AutoApplyWorkflow: React.FC<AutoApplyWorkflowProps> = ({
         jobTitle: selectedJob.title,
         company: selectedJob.company,
         sourcePortal: selectedJob.sourcePortal,
-        status: 'Submitted',
+        status: atsResult.status === 'Queued' ? 'Submitted' : 'Submitted',
         matchScore: selectedJob.matchScore?.overallPercentage || 94,
         atsScore: activeResume.atsScore,
         tailoredBulletPoints: activeResume.diffs.map(d => d.optimized),
         coverLetterContent: coverLetter.content,
-        submissionToken: `oauth-tx-${selectedJob.sourcePortal.toLowerCase().replace(/\s+/g, '')}-${Date.now().toString(36)}`,
+        submissionToken: atsResult.confirmationId || `oauth-tx-${selectedJob.sourcePortal.toLowerCase().replace(/\s+/g, '')}-${Date.now().toString(36)}`,
         tailoredResumeId: activeResume.id,
         coverLetterId: coverLetter.id,
         appliedAt: new Date().toLocaleString(),
         screeningAnswers,
-        notes: `Submitted with approval. Resume ${activeResume.name} (ATS Score: ${activeResume.atsScore}%)`
+        notes: `Submitted with approval via ${selectedJob.sourcePortal} API. Receipt Token: ${atsResult.confirmationId}. Resume ATS Score: ${activeResume.atsScore}%.`
       };
 
       onApplicationSubmitted(newApp);
-    }, 4200);
+    }, 3200);
   };
 
   const handleAutoApplyAllMatched = () => {

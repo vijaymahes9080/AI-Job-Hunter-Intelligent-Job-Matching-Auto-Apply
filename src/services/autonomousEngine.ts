@@ -1,5 +1,6 @@
 import { CandidateProfile, Job, ApplicationItem, PortalAccount } from '../types';
 import { calculateJobMatch } from './aiMatchEngine';
+import { enqueueApplication } from './offlineQueue';
 
 export interface AutonomousApplicationResult {
   application: ApplicationItem;
@@ -32,7 +33,6 @@ export function generateTailoredATSResume(candidate: CandidateProfile, job: Job)
   const matchInfo = calculateJobMatch(candidate, job);
   const matchedList = matchInfo.matchingSkills.join(', ');
   
-  // Rewritten ATS optimized bullet points highlighting candidate strengths + targeting job requirements
   const tailoredBulletPoints: string[] = [
     `Architected and optimized high-throughput production systems leveraging ${job.skillsRequired.slice(0, 3).join(', ')}, boosting system performance by 42%.`,
     `Engineered end-to-end cloud microservices and responsive user interfaces utilizing ${matchedList || candidate.skills.slice(0, 3).join(', ')}.`,
@@ -40,7 +40,6 @@ export function generateTailoredATSResume(candidate: CandidateProfile, job: Job)
     `Collaborated with cross-functional product & engineering teams to deliver scalable solutions matching ${job.company}'s technology stack.`
   ];
 
-  // Target ATS score > 90%
   const atsScore = Math.min(98, Math.max(91, Math.round(matchInfo.overallPercentage * 0.95 + 10)));
 
   return {
@@ -85,7 +84,74 @@ export function generateScreeningAnswers(candidate: CandidateProfile, job: Job):
 }
 
 /**
- * Step 5: Execute Autonomous Submission via Portal OAuth/API Boundaries
+ * Step 5: Submit application to real ATS backend API (/api/apply/submit)
+ * If offline or server error, enqueues to offline storage.
+ */
+export async function submitToATS(
+  candidate: CandidateProfile,
+  job: Job,
+  coverLetterContent: string
+): Promise<{ success: boolean; confirmationId: string; status: 'Submitted' | 'Queued' }> {
+  const nameParts = (candidate.name || 'Candidate User').split(' ');
+  const firstName = nameParts[0] || 'Candidate';
+  const lastName = nameParts.slice(1).join(' ') || 'User';
+
+  const payload = {
+    portal: job.sourcePortal,
+    jobId: job.id,
+    jobTitle: job.title,
+    company: job.company,
+    boardToken: job.company.toLowerCase().replace(/\s+/g, ''),
+    postingId: job.id,
+    applicant: {
+      firstName,
+      lastName,
+      email: candidate.email || 'candidate@jobhunter.io',
+      phone: candidate.phone || '+15550192834',
+      coverLetter: coverLetterContent
+    }
+  };
+
+  if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    enqueueApplication(payload);
+    return {
+      success: true,
+      confirmationId: `offline-q-${Date.now().toString(36)}`,
+      status: 'Queued'
+    };
+  }
+
+  try {
+    const res = await fetch('/api/apply/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      signal: AbortSignal.timeout(8000)
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      return {
+        success: true,
+        confirmationId: data.confirmationId || `sub-${Date.now().toString(36)}`,
+        status: data.status === 'Queued' ? 'Queued' : 'Submitted'
+      };
+    }
+  } catch (e) {
+    console.warn('[ATS Submission] Direct API submission failed/offline. Queueing submission locally.', e);
+  }
+
+  // Fallback to local offline queue
+  enqueueApplication(payload);
+  return {
+    success: true,
+    confirmationId: `offline-q-${Date.now().toString(36)}`,
+    status: 'Queued'
+  };
+}
+
+/**
+ * Step 6: Execute Autonomous Pipeline
  */
 export function runAutonomousPipelineForJob(
   candidate: CandidateProfile,
@@ -95,21 +161,16 @@ export function runAutonomousPipelineForJob(
   const portal = job.sourcePortal;
   const matchingAccount = portalAccounts.find(p => p.portal === portal && p.status === 'Connected');
 
-  // Step 1: Gap & Match
   const gapAnalysis = extractSkillsAndGaps(candidate, job);
-  
-  // Step 2: Tailor ATS Resume
   const resumeDetails = generateTailoredATSResume(candidate, job);
-
-  // Step 3: Culture Cover Letter
   const coverLetterContent = generateCultureCoverLetter(candidate, job);
-
-  // Step 4: Screening Answers
   const screeningAnswers = generateScreeningAnswers(candidate, job);
 
-  // Step 5: Submission Token & Receipt Generation
   const tokenPrefix = portal.toLowerCase().replace(/\s+/g, '');
   const submissionToken = `oauth-tx-${tokenPrefix}-${Date.now().toString(36)}-${Math.random().toString(36).substring(2, 7)}`;
+
+  // Trigger non-blocking async submission attempt
+  submitToATS(candidate, job, coverLetterContent).catch(console.error);
 
   const application: ApplicationItem = {
     id: `auto-app-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,

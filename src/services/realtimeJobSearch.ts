@@ -1,4 +1,5 @@
 import type { Job, JobSource, CandidateProfile } from '../types';
+import { sanitizeInput } from './inputSanitizer';
 
 export interface LivePortalQuery {
   keywords: string;
@@ -6,85 +7,111 @@ export interface LivePortalQuery {
   portals: JobSource[];
 }
 
+/** Detect if we are running on the deployed Vercel backend or local dev */
+function getApiBase(): string {
+  if (typeof window !== 'undefined') {
+    // On Vercel or any HTTPS host the API lives at /api
+    if (window.location.hostname !== 'localhost') return '/api';
+    // During local dev — call the real APIs directly via the Vite dev server proxy
+    return '/api';
+  }
+  return '/api';
+}
+
+/**
+ * Fetch live jobs from the real backend proxy (/api/jobs/search).
+ * Falls back to an empty array (not fake data) on any failure.
+ */
 export async function searchRealtimeJobs(
   profile: CandidateProfile,
   query: LivePortalQuery
 ): Promise<Job[]> {
-  const roles = profile.preferredRoles.length > 0 ? profile.preferredRoles : [query.keywords || 'Software Engineer'];
-  const topSkills = profile.skills.length > 0 ? profile.skills.slice(0, 5) : ['React', 'TypeScript', 'Python', 'Node.js'];
-  const location = profile.location || query.location || 'Remote';
+  const roles      = profile.preferredRoles?.length > 0 ? profile.preferredRoles : [query.keywords || 'Software Engineer'];
+  const topSkills  = profile.skills?.length > 0 ? profile.skills.slice(0, 5) : ['React', 'TypeScript', 'Python'];
+  const location   = profile.location || query.location || 'Remote';
+  const portals    = query.portals?.length > 0 ? query.portals : ['Remotive', 'Greenhouse', 'Lever'] as JobSource[];
 
-  const portals: JobSource[] = query.portals.length > 0 ? query.portals : ['LinkedIn', 'Naukri', 'Indeed', 'Greenhouse', 'Lever', 'Ashby', 'Wellfound'];
+  const keywords = sanitizeInput(roles.concat(topSkills.slice(0, 2)).join(' '));
 
-  // Validate active OAuth tokens if candidate has linked accounts
-  const linkedMap = new Map((profile.linkedPortals || []).map(p => [p.portal, p]));
+  // ── If offline, return empty immediately ───────────────────────────────────
+  if (typeof navigator !== 'undefined' && !navigator.onLine) {
+    console.log('[RealTimeSearch] Offline — skipping API call, using cached data.');
+    return [];
+  }
 
-  console.log(`[Real-time Portal Aggregator] Initiating OAuth 2.0 authorized live feeds across ${portals.length} portals...`);
-  
-  portals.forEach(portal => {
-    const acc = linkedMap.get(portal);
-    if (acc && acc.status === 'Connected') {
-      console.log(`[Real-time Auth Header] Validated Bearer Token for ${portal} (${acc.accountEmail}) -> Token: ${acc.accessToken?.substring(0, 20)}... Signature: ${acc.tokenSignature}`);
-    }
-  });
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 12000);
 
-  // Simulate real-time live portal web scraping & API aggregation latency
-  await new Promise(resolve => setTimeout(resolve, 600));
-
-  const generatedJobs: Job[] = [];
-
-  const companiesByPortal: Record<JobSource, string[]> = {
-    'LinkedIn': ['Microsoft', 'Google', 'Meta', 'Stripe', 'Amazon'],
-    'Naukri': ['Swiggy', 'Razorpay', 'Flipkart', 'TCS Digital', 'Infosys Cobalt'],
-    'Indeed': ['Oracle', 'Salesforce', 'Uber', 'Zomato', 'Cisco'],
-    'Glassdoor': ['Adobe', 'Workday', 'ServiceNow', 'Intuit', 'Snowflake'],
-    'Greenhouse': ['Databricks', 'Snowflake', 'Figma', 'Vercel', 'Linear'],
-    'Lever': ['Notion', 'OpenAI', 'Postman', 'Scale AI', 'Brex'],
-    'Ashby': ['Ramp', 'Modal', 'Perplexity AI', 'Supabase', 'Retool'],
-    'Foundit': ['Persistent Systems', 'LTIMindtree', 'Wipro Digital', 'HCL Tech'],
-    'Wellfound': ['LangChain Labs', 'Pinecone AI', 'Weaviate', 'ChromaDB'],
-    'Internshala': ['TechCorp India', 'InnovateX', 'DevStudio'],
-    'Company Careers': ['Direct Global Enterprise', 'Acme AI Systems']
-  };
-
-  portals.forEach((portal, pIdx) => {
-    const companies = companiesByPortal[portal] || ['TechCorp'];
-    const acc = linkedMap.get(portal);
-    const isAuthenticated = acc?.status === 'Connected';
-
-    roles.forEach((roleTitle, rIdx) => {
-      const company = companies[(rIdx + pIdx) % companies.length];
-      const salaryMin = profile.preferredSalaryMin > 0 ? profile.preferredSalaryMin : 2500000;
-      const salaryMax = Math.round(salaryMin * 1.4);
-
-      const job: Job = {
-        id: `live-${portal.toLowerCase()}-${pIdx}-${rIdx}-${Date.now()}`,
-        title: roleTitle,
-        company,
-        companyRating: 4.5 + (pIdx % 5) * 0.1,
-        companyLogo: `https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=120&q=80`,
-        location,
-        workplaceType: 'Remote',
-        jobType: 'Full-Time',
-        companyType: pIdx % 2 === 0 ? 'Startup' : 'MNC',
-        salaryMin,
-        salaryMax,
-        salaryCurrency: 'INR',
-        experienceMin: 2,
-        experienceMax: 6,
-        skillsRequired: [...topSkills, 'TypeScript', 'Node.js', 'Problem Solving'].filter(Boolean),
-        educationRequired: 'B.Tech / B.E. / Equivalent Experience',
-        description: `Live posting aggregated from ${portal} API feed. OAuth 2.0 Session: ${isAuthenticated ? 'Authenticated & Authorized' : 'Public Feed'}. Requires expertise in ${topSkills.join(', ')}.`,
-        benefits: ['100% Remote Option', 'Health Insurance', 'Annual Bonus'],
-        applyUrl: `https://${portal.toLowerCase()}.com/jobs/${company.toLowerCase()}-${rIdx}`,
-        sourcePortal: portal,
-        postedTime: 'Just now',
-        deadline: '2026-09-30'
-      };
-
-      generatedJobs.push(job);
+    const res = await fetch(`${getApiBase()}/jobs/search`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ keywords, location, portals, minSalary: profile.preferredSalaryMin || 0 }),
+      signal: controller.signal
     });
-  });
 
-  return generatedJobs;
+    clearTimeout(timeout);
+
+    if (!res.ok) {
+      console.warn(`[RealTimeSearch] API returned ${res.status} — returning empty.`);
+      return [];
+    }
+
+    const data = await res.json() as { jobs: any[]; errors?: string[] };
+
+    if (data.errors?.length) {
+      console.warn('[RealTimeSearch] Partial source errors:', data.errors);
+    }
+
+    // Normalize: ensure every required Job field exists
+    return (data.jobs || []).map(normalizeJob).filter(Boolean) as Job[];
+
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      console.warn('[RealTimeSearch] Request timed out (12s).');
+    } else {
+      console.warn('[RealTimeSearch] Fetch error:', err.message);
+    }
+    return [];
+  }
+}
+
+/** Map any raw API job object to the canonical Job shape */
+function normalizeJob(raw: any): Job | null {
+  if (!raw?.id || !raw?.title) return null;
+  return {
+    id:                raw.id,
+    title:             raw.title,
+    company:           raw.company || 'Unknown Company',
+    companyRating:     raw.companyRating ?? 4.0,
+    companyLogo:       raw.companyLogo || `https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=120&q=80`,
+    companyType:       raw.companyType || 'Startup',
+    location:          raw.location || 'Remote',
+    workplaceType:     raw.workplaceType || 'Remote',
+    jobType:           raw.jobType || 'Full-Time',
+    salaryMin:         Number(raw.salaryMin) || 0,
+    salaryMax:         Number(raw.salaryMax) || 0,
+    salaryCurrency:    raw.salaryCurrency || 'INR',
+    experienceMin:     Number(raw.experienceMin) || 2,
+    experienceMax:     Number(raw.experienceMax) || 7,
+    skillsRequired:    Array.isArray(raw.skillsRequired) ? raw.skillsRequired.slice(0, 10) : [],
+    educationRequired: raw.educationRequired || 'B.Tech or equivalent',
+    description:       raw.description || `${raw.title} role at ${raw.company}.`,
+    benefits:          Array.isArray(raw.benefits) ? raw.benefits : [],
+    applyUrl:          raw.applyUrl || '#',
+    sourcePortal:      raw.sourcePortal || 'Wellfound',
+    postedTime:        raw.postedTime || 'Recently',
+    deadline:          raw.deadline || '',
+    matchScore:        undefined // computed later by aiMatchEngine
+  };
+}
+
+/**
+ * Deduplicates and merges a new batch of jobs with the existing list.
+ * Keeps existing matchScore for jobs already present; adds new ones to the top.
+ */
+export function deduplicateAndMerge(existing: Job[], incoming: Job[]): Job[] {
+  const existingIds = new Set(existing.map(j => j.id));
+  const trulyNew    = incoming.filter(j => !existingIds.has(j.id));
+  return [...trulyNew, ...existing].slice(0, 100); // cap at 100 total
 }

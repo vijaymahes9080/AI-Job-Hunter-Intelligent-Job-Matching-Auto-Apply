@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, ShieldCheck, RefreshCw, Zap, ExternalLink, Sliders, AlertCircle, Key, Lock, Activity, ChevronRight } from 'lucide-react';
 import type { PortalAccount, JobSource, CandidateProfile } from '../types';
-import { executeRealtimeOAuthHandshake, testLivePortalConnection, performSystemSecurityAudit, openLivePortalOAuthPopup, OAuthHandshakeProgress } from '../services/portalAuthService';
+import { executeRealtimeOAuthHandshake, testLivePortalConnection, performSystemSecurityAudit, OAuthHandshakeProgress } from '../services/portalAuthService';
 
 interface PortalConnectModalProps {
   isOpen: boolean;
@@ -402,7 +402,7 @@ export const PortalConnectModal: React.FC<PortalConnectModalProps> = ({
                           </button>
 
                           <button
-                            onClick={() => openLivePortalOAuthPopup(account.portal, clientIdInput[account.id])}
+                            onClick={() => handleConnectToggle(account)}
                             title={`Launch live ${account.portal} authentication window`}
                             className="p-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-indigo-500/50 text-indigo-400 hover:text-white transition-colors"
                           >

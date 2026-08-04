@@ -166,13 +166,13 @@ export interface PortalAccount {
   lastSyncAt: string;
   autoApplyEnabled: boolean;
   oauthScope?: string;
-  authMethod: 'OAuth 2.0' | 'API Key' | 'Session Token' | 'Cookie Handshake';
+  authMethod: 'OAuth 2.0' | 'OAuth 2.0 PKCE' | 'API Key' | 'Session Token' | 'Cookie Handshake' | 'Session Marker';
   avatarUrl?: string;
   accessToken?: string;
   refreshToken?: string;
   expiresAt?: string;
   tokenSignature?: string;
-  securityEncryption?: 'AES-256-GCM' | 'SHA-256 Vault' | 'PKCE OAuth 2.0 State';
+  securityEncryption?: 'AES-256-GCM' | 'SHA-256 Vault' | 'PKCE OAuth 2.0 State' | 'AES-256-GCM + PKCE SHA-256';
   latencyMs?: number;
   liveFeedStatus?: 'Active' | 'Degraded' | 'Offline';
 }
