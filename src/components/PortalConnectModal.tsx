@@ -107,6 +107,8 @@ export const PortalConnectModal: React.FC<PortalConnectModalProps> = ({
 
   if (!isOpen) return null;
 
+  const [clientIdInput, setClientIdInput] = useState<Record<string, string>>({});
+
   const handleConnectToggle = async (account: PortalAccount) => {
     if (account.status === 'Connected') {
       // Disconnect
@@ -127,8 +129,9 @@ export const PortalConnectModal: React.FC<PortalConnectModalProps> = ({
       // Start Real-time PKCE OAuth 2.0 Security Handshake
       setConnectingPortal(account.id);
       const userEmail = emailInput[account.id] || `${account.portal.toLowerCase().replace(/\s+/g, '')}.user@auth-vault.com`;
+      const customClientId = clientIdInput[account.id];
 
-      const authData = await executeRealtimeOAuthHandshake(account.portal, userEmail, (progress) => {
+      const authData = await executeRealtimeOAuthHandshake(account.portal, userEmail, customClientId, (progress) => {
         setHandshakeLog(progress);
       });
 
@@ -399,7 +402,7 @@ export const PortalConnectModal: React.FC<PortalConnectModalProps> = ({
                           </button>
 
                           <button
-                            onClick={() => openLivePortalOAuthPopup(account.portal)}
+                            onClick={() => openLivePortalOAuthPopup(account.portal, clientIdInput[account.id])}
                             title={`Launch live ${account.portal} authentication window`}
                             className="p-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-indigo-500/50 text-indigo-400 hover:text-white transition-colors"
                           >

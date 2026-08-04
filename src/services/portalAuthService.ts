@@ -24,7 +24,7 @@ export interface SecurityAuditResult {
 }
 
 export const LIVE_PORTAL_OAUTH_URLS: Record<JobSource, string> = {
-  LinkedIn: 'https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=788192a91&redirect_uri=https://aijobhunter.io/callback&scope=r_liteprofile%20r_emailaddress%20w_member_social',
+  LinkedIn: 'https://www.linkedin.com/login',
   Naukri: 'https://www.naukri.com/nlogin/login',
   Indeed: 'https://secure.indeed.com/account/login',
   Glassdoor: 'https://www.glassdoor.com/member/account/index.htm',
@@ -70,10 +70,15 @@ export async function generatePKCEChallenge(): Promise<{ codeVerifier: string; c
 }
 
 /**
- * Launch Real Live Portal OAuth Authorization Popup Window
+ * Launch Real Live Portal OAuth Authorization Popup Window cleanly
  */
-export function openLivePortalOAuthPopup(portal: JobSource): Window | null {
-  const authUrl = LIVE_PORTAL_OAUTH_URLS[portal] || 'https://www.linkedin.com/';
+export function openLivePortalOAuthPopup(portal: JobSource, customClientId?: string): Window | null {
+  let authUrl = LIVE_PORTAL_OAUTH_URLS[portal] || 'https://www.linkedin.com/login';
+
+  if (portal === 'LinkedIn' && customClientId && customClientId.trim().length > 3) {
+    authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${encodeURIComponent(customClientId.trim())}&redirect_uri=https://aijobhunter.io/callback&scope=r_liteprofile%20r_emailaddress%20w_member_social`;
+  }
+
   const width = 680;
   const height = 750;
   const left = typeof window !== 'undefined' ? (window.innerWidth - width) / 2 : 100;
@@ -95,6 +100,7 @@ export function openLivePortalOAuthPopup(portal: JobSource): Window | null {
 export async function executeRealtimeOAuthHandshake(
   portal: JobSource,
   accountEmail: string,
+  customClientId?: string,
   onProgress?: (progress: OAuthHandshakeProgress) => void
 ): Promise<Partial<PortalAccount>> {
   const portalCode = portal.toLowerCase().replace(/\s+/g, '');
@@ -111,12 +117,12 @@ export async function executeRealtimeOAuthHandshake(
   // Step 2: Identity & Scope Verification + Launch Live OAuth Portal Window
   onProgress?.({
     step: 2,
-    stage: 'Live Portal OAuth Handshake',
-    detail: `Opening live ${portal} OAuth 2.0 authorization endpoint for identity validation (${accountEmail || `${portalCode}.user@domain.com`}).`
+    stage: 'Live Portal Authorization',
+    detail: `Opening live ${portal} authorization portal for account (${accountEmail || `${portalCode}.user@domain.com`}).`
   });
   
-  // Launch live portal popup
-  openLivePortalOAuthPopup(portal);
+  // Launch live portal popup with clean URL (avoiding invalid client_id errors)
+  openLivePortalOAuthPopup(portal, customClientId);
   await new Promise(r => setTimeout(r, 600));
 
   // Step 3: Authorization Code Exchange
