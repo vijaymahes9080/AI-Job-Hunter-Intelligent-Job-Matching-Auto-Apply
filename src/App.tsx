@@ -253,69 +253,10 @@ export function App() {
               />
             )}
 
-            {activeTab === 'cover-letter' && (
-              <AICoverLetterStudio 
-                jobs={jobs}
-                profile={profile}
-                initialJob={selectedJobModal}
-              />
-            )}
-
-            {activeTab === 'interview-sim' && (
-              <AIInterviewSimulator 
-                profile={profile}
-                onDeductCredit={() => setAiCredits(prev => Math.max(0, prev - 1))}
-              />
-            )}
-
-            {activeTab === 'agent-scout' && (
-              <AgentScoutControl 
-                jobs={jobs}
-                onTriggerAutoApply={(job) => {
-                  setActiveTab('auto-apply');
-                }}
-              />
-            )}
-
-            {activeTab === 'ats-auditor' && (
-              <ATSScoreAuditor 
-                profile={profile}
-                onUpdateProfile={handleSaveProfile}
-              />
-            )}
-
-            {activeTab === 'contributions' && (
-              <ContributionTracker 
-                applications={applications}
-              />
-            )}
-
-            {activeTab === 'salary-neg' && (
-              <SalaryNegotiator 
-                profile={profile}
-                onDeductCredit={() => setAiCredits(prev => Math.max(0, prev - 1))}
-              />
-            )}
-
             {activeTab === 'applications' && (
               <ApplicationTracker 
                 applications={applications}
                 onUpdateStatus={handleUpdateAppStatus}
-              />
-            )}
-
-            {activeTab === 'ai-assistant' && (
-              <AIChatAssistant 
-                jobs={jobs}
-                profile={profile}
-                onNavigateTab={setActiveTab}
-              />
-            )}
-
-            {activeTab === 'analytics' && (
-              <AnalyticsView 
-                applications={applications}
-                jobs={jobs}
               />
             )}
           </>
