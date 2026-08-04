@@ -357,6 +357,7 @@ export function App() {
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         onImportLinkedIn={handleImportLinkedIn}
+        currentProfile={profile}
       />
 
       <QuickStartWizard 
