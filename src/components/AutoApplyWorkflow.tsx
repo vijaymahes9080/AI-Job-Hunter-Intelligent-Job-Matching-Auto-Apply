@@ -104,6 +104,62 @@ export const AutoApplyWorkflow: React.FC<AutoApplyWorkflowProps> = ({
     }, 4200);
   };
 
+  const handleAutoApplyAllMatched = () => {
+    // Filter high match jobs (>80% match score) that are not already submitted
+    const suitableJobs = jobs.filter(j => 
+      (j.matchScore?.overallPercentage || 0) >= 80 && 
+      !applications.some(a => a.jobId === j.id)
+    );
+
+    if (suitableJobs.length === 0) {
+      alert('All suitable high-match jobs (>80%) have already been applied to!');
+      return;
+    }
+
+    setSubmitting(true);
+    let count = 0;
+
+    suitableJobs.forEach((job, idx) => {
+      setTimeout(() => {
+        setSubmissionStep(`[${idx + 1}/${suitableJobs.length}] Auto-applying to ${job.title} at ${job.company} (${job.matchScore?.overallPercentage || 85}% match)...`);
+
+        const tailoredResumes = generateTailoredResumes(profile, job);
+        const tailoredCover = generateCoverLetter(profile, job, 'Professional');
+
+        const newApp: ApplicationItem = {
+          id: `app-${Date.now()}-${idx}`,
+          jobId: job.id,
+          jobTitle: job.title,
+          company: job.company,
+          sourcePortal: job.sourcePortal,
+          status: 'Submitted',
+          matchScore: job.matchScore?.overallPercentage || 88,
+          tailoredResumeId: tailoredResumes[0].id,
+          coverLetterId: tailoredCover.id,
+          appliedAt: new Date().toLocaleString(),
+          screeningAnswers: {
+            'Notice Period': `${profile.noticePeriodDays} Days`,
+            'Expected Salary': `₹${(profile.preferredSalaryMin/100000).toFixed(0)} LPA`
+          },
+          notes: `Automated batch application submitted for high-match job (${job.matchScore?.overallPercentage || 88}% BERT similarity).`
+        };
+
+        onApplicationSubmitted(newApp);
+        count++;
+
+        if (count === suitableJobs.length) {
+          confetti({
+            particleCount: 150,
+            spread: 90,
+            origin: { y: 0.5 }
+          });
+          setSubmitting(false);
+          setSubmissionStep('');
+        }
+      }, (idx + 1) * 1500);
+    });
+  };
+
   return (
     <div className="space-y-8 animate-in fade-in max-w-6xl mx-auto">
       {/* Header Banner */}
@@ -121,12 +177,23 @@ export const AutoApplyWorkflow: React.FC<AutoApplyWorkflowProps> = ({
           </p>
         </div>
 
-        <button
-          onClick={onNavigateTracker}
-          className="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-600 text-xs font-bold text-slate-300 hover:text-white transition-colors"
-        >
-          View Submitted Applications Tracker
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleAutoApplyAllMatched}
+            disabled={submitting}
+            className="px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 via-indigo-600 to-purple-600 hover:opacity-95 text-white font-extrabold text-xs shadow-lg shadow-emerald-500/20 flex items-center gap-1.5 transition-all disabled:opacity-50"
+          >
+            <Zap className="w-4 h-4 fill-current text-yellow-300 animate-pulse" />
+            <span>Auto-Apply All Matched Jobs (&gt;80%)</span>
+          </button>
+
+          <button
+            onClick={onNavigateTracker}
+            className="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-600 text-xs font-bold text-slate-300 hover:text-white transition-colors"
+          >
+            View Applications Tracker
+          </button>
+        </div>
       </div>
 
       {/* Main Grid: Job Selector Sidebar & Review Workspace */}

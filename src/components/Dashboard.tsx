@@ -84,6 +84,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <span>1-Click Quick Setup Wizard</span>
             </button>
 
+            {/* Direct Auto-Apply All Matched Trigger Button */}
+            <button
+              onClick={() => onNavigateTab('auto-apply')}
+              className="flex items-center gap-2 px-5 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-500/25 transition-all hover:scale-105"
+            >
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span>Auto-Apply All Matched Jobs</span>
+            </button>
+
             <button
               onClick={() => onNavigateTab('jobs')}
               className="flex items-center gap-2 px-5 py-3.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-indigo-500 text-white font-bold text-sm transition-all"
