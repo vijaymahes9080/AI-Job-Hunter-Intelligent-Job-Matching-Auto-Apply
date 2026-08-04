@@ -81,18 +81,10 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const jobSeekerNav: NavItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-    { id: 'jobs', label: 'Jobs', icon: Search, badge: '9 Portals' },
-    { id: 'profile', label: 'Profile', icon: User },
-    { id: 'auto-apply', label: 'Auto-Apply', icon: CheckCircle2, badge: 'Approval First' },
-    { id: 'cover-letter', label: 'Cover Letter', icon: Layers },
-    { id: 'interview-sim', label: 'AI Interview', icon: Mic, highlight: true },
-    { id: 'agent-scout', label: 'Agent Scout', icon: Radio, badge: 'Autonomous' },
-    { id: 'ats-auditor', label: 'ATS Heatmap', icon: ShieldAlert },
-    { id: 'contributions', label: '10x Activity', icon: Flame, highlight: true },
-    { id: 'salary-neg', label: 'Salary Negotiator', icon: DollarSign },
-    { id: 'applications', label: 'Tracker', icon: Briefcase },
-    { id: 'ai-assistant', label: 'AI Assistant', icon: Bot },
-    { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+    { id: 'jobs', label: 'Real-Time Jobs', icon: Search, badge: '9 Portals' },
+    { id: 'profile', label: 'Security & Profile', icon: User },
+    { id: 'auto-apply', label: 'Auto-Apply Engine', icon: CheckCircle2, badge: 'Autonomous' },
+    { id: 'applications', label: 'Review Log', icon: Briefcase },
   ];
 
   const recruiterNav: NavItem[] = [
