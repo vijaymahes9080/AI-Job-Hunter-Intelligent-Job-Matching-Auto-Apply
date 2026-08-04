@@ -1,6 +1,7 @@
 import { CandidateProfile, Job, ApplicationItem, PortalAccount } from '../types';
 import { calculateJobMatch } from './aiMatchEngine';
 import { enqueueApplication } from './offlineQueue';
+import { getPortalToken } from './tokenVault';
 
 export interface AutonomousApplicationResult {
   application: ApplicationItem;
@@ -96,6 +97,8 @@ export async function submitToATS(
   const firstName = nameParts[0] || 'Candidate';
   const lastName = nameParts.slice(1).join(' ') || 'User';
 
+  const accessToken = await getPortalToken(job.sourcePortal);
+
   const payload = {
     portal: job.sourcePortal,
     jobId: job.id,
@@ -103,6 +106,7 @@ export async function submitToATS(
     company: job.company,
     boardToken: job.company.toLowerCase().replace(/\s+/g, ''),
     postingId: job.id,
+    accessToken: accessToken || undefined,
     applicant: {
       firstName,
       lastName,
