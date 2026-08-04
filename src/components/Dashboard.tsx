@@ -74,30 +74,29 @@ export const Dashboard: React.FC<DashboardProps> = ({
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3">
-            {/* 1-Click Wizard Button for Non-Technical Users */}
+          {/* CTA Buttons — uniform height grid row */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto lg:flex lg:items-stretch">
             <button
               onClick={onOpenWizard}
-              className="flex items-center gap-2 px-6 py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 via-indigo-600 to-purple-600 hover:from-emerald-400 text-white font-extrabold text-sm shadow-xl shadow-indigo-500/30 transition-all hover:scale-105"
+              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-emerald-500 via-indigo-600 to-purple-600 hover:opacity-90 text-white font-extrabold text-sm shadow-xl shadow-indigo-500/25 transition-all hover:scale-[1.02] active:scale-100"
             >
-              <Zap className="w-4 h-4 fill-current" />
-              <span>1-Click Quick Setup Wizard</span>
+              <Zap className="w-4 h-4 fill-current flex-shrink-0" />
+              <span>Quick Setup Wizard</span>
             </button>
 
-            {/* Direct Auto-Apply All Matched Trigger Button */}
             <button
               onClick={() => onNavigateTab('auto-apply')}
-              className="flex items-center gap-2 px-5 py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 text-white font-bold text-sm shadow-lg shadow-indigo-500/25 transition-all hover:scale-105"
+              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-90 text-white font-bold text-sm shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02] active:scale-100"
             >
-              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-              <span>Auto-Apply All Matched Jobs</span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-300 flex-shrink-0" />
+              <span>Auto-Apply Matched Jobs</span>
             </button>
 
             <button
               onClick={() => onNavigateTab('jobs')}
-              className="flex items-center gap-2 px-5 py-3.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-indigo-500 text-white font-bold text-sm transition-all"
+              className="flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-slate-900/80 border border-slate-700 hover:border-indigo-500/60 hover:bg-slate-800/60 text-white font-bold text-sm transition-all hover:scale-[1.02] active:scale-100"
             >
-              <Search className="w-4 h-4" />
+              <Search className="w-4 h-4 flex-shrink-0" />
               <span>Browse Job Feed</span>
             </button>
           </div>

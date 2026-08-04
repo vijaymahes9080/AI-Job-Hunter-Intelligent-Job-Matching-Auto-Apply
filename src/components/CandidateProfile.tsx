@@ -108,32 +108,23 @@ export const CandidateProfileView: React.FC<CandidateProfileProps> = ({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        {/* Action buttons — all same height, single row */}
+        <div className="flex flex-wrap items-center gap-2">
           {onOpenPortalConnect && (
             <button
               onClick={onOpenPortalConnect}
-              className="px-4 py-2.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/40 text-xs font-bold flex items-center gap-2 shadow-md"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-purple-600/15 hover:bg-purple-600/25 text-purple-300 border border-purple-500/35 text-xs font-bold transition-all hover:scale-[1.02]"
             >
-              <Globe className="w-4 h-4 text-purple-400" />
-              <span>Link 9 Job Portals</span>
+              <Globe className="w-3.5 h-3.5 flex-shrink-0 text-purple-400" />
+              <span>Link 9 Portals</span>
             </button>
           )}
 
           <button
-            onClick={onOpenAuth}
-            className="px-4 py-2.5 rounded-xl bg-[#0a66c2] hover:bg-[#084e96] text-white text-xs font-bold flex items-center gap-2 shadow-md"
-          >
-            <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
-              <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
-            </svg>
-            <span>Security Auth Login</span>
-          </button>
-
-          <button
             onClick={handleSave}
-            className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 text-white text-xs font-bold shadow-lg shadow-indigo-500/20 flex items-center gap-2"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:opacity-90 text-white text-xs font-bold shadow-lg shadow-indigo-500/20 transition-all hover:scale-[1.02]"
           >
-            <Save className="w-4 h-4" />
+            <Save className="w-3.5 h-3.5 flex-shrink-0" />
             <span>Save Profile</span>
           </button>
         </div>

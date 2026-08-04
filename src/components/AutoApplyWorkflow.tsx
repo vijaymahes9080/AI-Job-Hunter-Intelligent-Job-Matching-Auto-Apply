@@ -217,31 +217,39 @@ export const AutoApplyWorkflow: React.FC<AutoApplyWorkflowProps> = ({
               return (
                 <div
                   key={job.id}
-                  onClick={() => setSelectedJob(job)}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer ${
-                    isSelected 
-                      ? 'bg-slate-900/90 border-indigo-500 shadow-lg shadow-indigo-500/10 ring-1 ring-indigo-500/40' 
-                      : 'bg-slate-900/40 border-slate-800 hover:border-slate-700'
+                  onClick={() => !isSubmitted && setSelectedJob(job)}
+                  className={`p-4 rounded-2xl border transition-all ${
+                    isSubmitted
+                      ? 'bg-slate-900/20 border-slate-800/40 opacity-60 cursor-default'
+                      : isSelected
+                      ? 'bg-slate-900/90 border-indigo-500 shadow-lg shadow-indigo-500/10 ring-1 ring-indigo-500/40 cursor-pointer'
+                      : 'bg-slate-900/40 border-slate-800 hover:border-slate-700 cursor-pointer'
                   }`}
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <img src={job.companyLogo} alt={job.company} className="w-10 h-10 rounded-xl object-cover" />
+                      <img src={job.companyLogo} alt={job.company} className={`w-10 h-10 rounded-xl object-cover ${isSubmitted ? 'grayscale' : ''}`} />
                       <div>
-                        <h4 className="font-bold text-sm text-white">{job.title}</h4>
+                        <h4 className={`font-bold text-sm ${isSubmitted ? 'text-slate-500 line-through' : 'text-white'}`}>{job.title}</h4>
                         <p className="text-xs text-slate-400">{job.company} • {job.sourcePortal}</p>
                       </div>
                     </div>
 
-                    <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30">
-                      {job.matchScore?.overallPercentage || 92}%
-                    </span>
+                    {isSubmitted ? (
+                      <span className="px-2 py-0.5 rounded-md bg-slate-700/40 text-slate-500 text-xs font-bold border border-slate-700/40 flex-shrink-0">
+                        Done
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 rounded-md bg-emerald-500/20 text-emerald-400 text-xs font-bold border border-emerald-500/30 flex-shrink-0">
+                        {job.matchScore?.overallPercentage || 92}%
+                      </span>
+                    )}
                   </div>
 
                   {isSubmitted && (
-                    <div className="mt-3 pt-2 border-t border-slate-800 flex items-center gap-1.5 text-[11px] text-emerald-400 font-bold">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                      <span>Application Submitted!</span>
+                    <div className="mt-2 flex items-center gap-1.5 text-[10px] text-slate-500 font-semibold">
+                      <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                      <span>Submitted — see Review Log for details</span>
                     </div>
                   )}
                 </div>
