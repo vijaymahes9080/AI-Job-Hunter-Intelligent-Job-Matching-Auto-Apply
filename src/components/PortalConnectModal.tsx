@@ -105,9 +105,9 @@ export const PortalConnectModal: React.FC<PortalConnectModalProps> = ({
   const [diagnosticResult, setDiagnosticResult] = useState<Record<string, string>>({});
   const [activeTab, setActiveTab] = useState<'portals' | 'settings'>('portals');
 
-  if (!isOpen) return null;
-
   const [clientIdInput, setClientIdInput] = useState<Record<string, string>>({});
+
+  if (!isOpen) return null;
 
   const handleConnectToggle = async (account: PortalAccount) => {
     if (account.status === 'Connected') {
