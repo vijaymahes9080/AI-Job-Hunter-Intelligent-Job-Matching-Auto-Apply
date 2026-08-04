@@ -47,6 +47,8 @@ interface NavbarProps {
   onOpenWizard: () => void;
   onMarkNotificationsRead: () => void;
   onOpenChromeExtension: () => void;
+  autoPilotActive: boolean;
+  setAutoPilotActive: (ap: boolean) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -65,7 +67,9 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSubscription,
   onOpenWizard,
   onMarkNotificationsRead,
-  onOpenChromeExtension
+  onOpenChromeExtension,
+  autoPilotActive,
+  setAutoPilotActive
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -177,6 +181,20 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Role Switcher & AI Credits & Controls */}
         <div className="flex items-center gap-3">
+          {/* Autonomous Auto-Pilot Toggle */}
+          <button
+            onClick={() => setAutoPilotActive(!autoPilotActive)}
+            title="When active, AI automatically scouts, tailors resumes, and applies to high-match jobs in the background while you are away."
+            className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-extrabold border transition-all ${
+              autoPilotActive
+                ? 'bg-purple-500/20 text-purple-300 border-purple-500/40 shadow-sm shadow-purple-500/20 animate-pulse'
+                : 'bg-slate-900 text-slate-500 border-slate-800'
+            }`}
+          >
+            <Bot className="w-3.5 h-3.5 text-purple-400" />
+            <span>{autoPilotActive ? 'Auto-Pilot ON' : 'Auto-Pilot OFF'}</span>
+          </button>
+
           {/* Simple Mode Toggle */}
           <button
             onClick={() => setSimpleMode(!simpleMode)}

@@ -56,6 +56,8 @@ export function App() {
   const [subscriptionModalOpen, setSubscriptionModalOpen] = useState(false);
   const [chromeModalOpen, setChromeModalOpen] = useState(false);
 
+  const [autoPilotActive, setAutoPilotActive] = useState<boolean>(true);
+
   // Initialize and compute AI match scores for jobs on profile change
   useEffect(() => {
     const rawJobs = loadJobs();
@@ -66,6 +68,60 @@ export function App() {
 
     setJobs(scoredJobs);
   }, [profile]);
+
+  // Autonomous Zero-Intervention Background Auto-Apply Engine
+  useEffect(() => {
+    if (!autoPilotActive || jobs.length === 0) return;
+
+    const timer = setTimeout(() => {
+      // Find suitable unsubmitted jobs (>80% match score)
+      const suitableJobs = jobs.filter(j => 
+        (j.matchScore?.overallPercentage || 0) >= 80 && 
+        !applications.some(a => a.jobId === j.id)
+      );
+
+      if (suitableJobs.length > 0) {
+        const topJob = suitableJobs[0];
+        const newApp: ApplicationItem = {
+          id: `auto-app-${Date.now()}`,
+          jobId: topJob.id,
+          jobTitle: topJob.title,
+          company: topJob.company,
+          sourcePortal: topJob.sourcePortal,
+          status: 'Submitted',
+          matchScore: topJob.matchScore?.overallPercentage || 92,
+          tailoredResumeId: `resume-auto-${Date.now()}`,
+          coverLetterId: `cover-auto-${Date.now()}`,
+          appliedAt: new Date().toLocaleString(),
+          screeningAnswers: {
+            'Notice Period': `${profile.noticePeriodDays} Days`,
+            'Expected Salary': `₹${(profile.preferredSalaryMin/100000).toFixed(0)} LPA`
+          },
+          notes: '🤖 Automatically submitted by Zero-Intervention Autonomous Auto-Pilot daemon while you were away.'
+        };
+
+        const updatedApps = [newApp, ...applications];
+        setApplications(updatedApps);
+        saveApplications(updatedApps);
+
+        const newNotif: NotificationItem = {
+          id: `notif-auto-${Date.now()}`,
+          title: '🤖 Autonomous Auto-Pilot Submission',
+          message: `Zero-human intervention: Automatically tailored ATS resume & submitted application for ${topJob.title} at ${topJob.company} (${topJob.matchScore?.overallPercentage || 92}% match). Review anytime at your convenience!`,
+          type: 'high_match',
+          timestamp: 'Just now',
+          read: false,
+          jobId: topJob.id
+        };
+
+        const updatedNotifs = [newNotif, ...notifications];
+        setNotifications(updatedNotifs);
+        saveNotifications(updatedNotifs);
+      }
+    }, 4000);
+
+    return () => clearTimeout(timer);
+  }, [autoPilotActive, jobs, applications, profile, notifications]);
 
   // Handlers
   const handleSaveProfile = (updated: CandidateProfile) => {
@@ -142,6 +198,8 @@ export function App() {
         onOpenWizard={() => setQuickWizardOpen(true)}
         onMarkNotificationsRead={handleMarkNotificationsRead}
         onOpenChromeExtension={() => setChromeModalOpen(true)}
+        autoPilotActive={autoPilotActive}
+        setAutoPilotActive={setAutoPilotActive}
       />
 
       {/* Main Page Workspace */}
