@@ -10,7 +10,12 @@ export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
     lastSyncAt: 'Just now',
     autoApplyEnabled: true,
     oauthScope: 'r_liteprofile r_emailaddress w_member_social r_fullprofile_apply',
-    authMethod: 'OAuth 2.0'
+    authMethod: 'OAuth 2.0',
+    accessToken: 'eyJhbGciOiJSUzI1NiIsImtpZCI6ImxpbmtlZGluLTIwMjYifQ.eyJzdWIiOiJ1c2VyLTEyMyJ9',
+    tokenSignature: 'sha256-pkce-li-8f92a1',
+    securityEncryption: 'PKCE OAuth 2.0 State',
+    latencyMs: 142,
+    liveFeedStatus: 'Active'
   },
   {
     id: 'portal-naukri',
@@ -20,7 +25,12 @@ export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
     connectedAt: '2026-08-02',
     lastSyncAt: '10 mins ago',
     autoApplyEnabled: true,
-    authMethod: 'Session Token'
+    authMethod: 'Session Token',
+    accessToken: 'nk_sess_89a27f4c01b23',
+    tokenSignature: 'sha256-nk-992a',
+    securityEncryption: 'AES-256-GCM',
+    latencyMs: 185,
+    liveFeedStatus: 'Active'
   },
   {
     id: 'portal-indeed',
@@ -30,7 +40,12 @@ export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
     connectedAt: '2026-08-03',
     lastSyncAt: '5 mins ago',
     autoApplyEnabled: true,
-    authMethod: 'OAuth 2.0'
+    authMethod: 'OAuth 2.0',
+    accessToken: 'id_oauth_bearer_99012a',
+    tokenSignature: 'sha256-id-381a',
+    securityEncryption: 'PKCE OAuth 2.0 State',
+    latencyMs: 120,
+    liveFeedStatus: 'Active'
   },
   {
     id: 'portal-glassdoor',
@@ -40,7 +55,10 @@ export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
     connectedAt: 'Not Connected',
     lastSyncAt: 'Never',
     autoApplyEnabled: false,
-    authMethod: 'API Key'
+    authMethod: 'API Key',
+    securityEncryption: 'AES-256-GCM',
+    latencyMs: 0,
+    liveFeedStatus: 'Offline'
   },
   {
     id: 'portal-greenhouse',
@@ -50,7 +68,12 @@ export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
     connectedAt: '2026-08-01',
     lastSyncAt: '1 hour ago',
     autoApplyEnabled: true,
-    authMethod: 'OAuth 2.0'
+    authMethod: 'OAuth 2.0',
+    accessToken: 'gh_candidate_tok_33912',
+    tokenSignature: 'sha256-gh-110a',
+    securityEncryption: 'PKCE OAuth 2.0 State',
+    latencyMs: 95,
+    liveFeedStatus: 'Active'
   },
   {
     id: 'portal-lever',
@@ -60,7 +83,12 @@ export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
     connectedAt: '2026-08-01',
     lastSyncAt: '30 mins ago',
     autoApplyEnabled: true,
-    authMethod: 'OAuth 2.0'
+    authMethod: 'OAuth 2.0',
+    accessToken: 'lever_cand_bearer_88291',
+    tokenSignature: 'sha256-lever-442a',
+    securityEncryption: 'PKCE OAuth 2.0 State',
+    latencyMs: 110,
+    liveFeedStatus: 'Active'
   },
   {
     id: 'portal-ashby',
@@ -70,7 +98,12 @@ export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
     connectedAt: '2026-08-02',
     lastSyncAt: '15 mins ago',
     autoApplyEnabled: true,
-    authMethod: 'OAuth 2.0'
+    authMethod: 'OAuth 2.0',
+    accessToken: 'ashby_tok_99182a',
+    tokenSignature: 'sha256-ashby-001a',
+    securityEncryption: 'PKCE OAuth 2.0 State',
+    latencyMs: 88,
+    liveFeedStatus: 'Active'
   },
   {
     id: 'portal-foundit',
@@ -80,7 +113,10 @@ export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
     connectedAt: 'Not Connected',
     lastSyncAt: 'Never',
     autoApplyEnabled: false,
-    authMethod: 'Session Token'
+    authMethod: 'Session Token',
+    securityEncryption: 'AES-256-GCM',
+    latencyMs: 0,
+    liveFeedStatus: 'Offline'
   },
   {
     id: 'portal-wellfound',
@@ -90,7 +126,12 @@ export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
     connectedAt: '2026-08-03',
     lastSyncAt: '2 hours ago',
     autoApplyEnabled: true,
-    authMethod: 'OAuth 2.0'
+    authMethod: 'OAuth 2.0',
+    accessToken: 'wf_angel_tok_7721a',
+    tokenSignature: 'sha256-wf-883a',
+    securityEncryption: 'PKCE OAuth 2.0 State',
+    latencyMs: 130,
+    liveFeedStatus: 'Active'
   }
 ];
 

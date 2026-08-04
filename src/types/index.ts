@@ -168,6 +168,13 @@ export interface PortalAccount {
   oauthScope?: string;
   authMethod: 'OAuth 2.0' | 'API Key' | 'Session Token' | 'Cookie Handshake';
   avatarUrl?: string;
+  accessToken?: string;
+  refreshToken?: string;
+  expiresAt?: string;
+  tokenSignature?: string;
+  securityEncryption?: 'AES-256-GCM' | 'SHA-256 Vault' | 'PKCE OAuth 2.0 State';
+  latencyMs?: number;
+  liveFeedStatus?: 'Active' | 'Degraded' | 'Offline';
 }
 
 export interface ApplicationItem {
