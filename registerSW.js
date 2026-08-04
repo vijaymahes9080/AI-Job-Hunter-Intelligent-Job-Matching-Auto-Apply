@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/AI-Job-Hunter-Intelligent-Job-Matching-Auto-Apply/sw.js', { scope: '/AI-Job-Hunter-Intelligent-Job-Matching-Auto-Apply/' })})}
