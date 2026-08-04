@@ -147,6 +147,17 @@ Aggregates job listings in real-time from 9 top job portals & ATS platforms:
 | **Parser & Storage** | Client-side PDF/DOCX Parser, LocalStorage Persistence API |
 | **Auth & Compliance** | OAuth 2.0 Direct Auth Sync, Zero Password Storage Policy |
 
+## 🌐 Live GitHub Pages Deployment
+
+The application is configured for 1-click automated build & deployment via GitHub Actions:
+
+- **Live Demo Site**: [https://vijaymahes9080.github.io/AI-Job-Hunter/](https://vijaymahes9080.github.io/AI-Job-Hunter/)
+
+### Enabling GitHub Pages in 1 Step:
+1. Go to your repository settings on GitHub: **Settings -> Pages**.
+2. Under **Build and deployment -> Source**, select **GitHub Actions** from the dropdown menu.
+3. The workflow `.github/workflows/deploy.yml` will automatically build and deploy the production site on every commit to `main`!
+
 ---
 
 ## 🚀 Quick Start Guide
