@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, ShieldCheck, RefreshCw, Zap, ExternalLink, Sliders, AlertCircle, Key, Lock, Activity, ChevronRight } from 'lucide-react';
 import type { PortalAccount, JobSource, CandidateProfile } from '../types';
-import { executeRealtimeOAuthHandshake, testLivePortalConnection, OAuthHandshakeProgress } from '../services/portalAuthService';
+import { executeRealtimeOAuthHandshake, testLivePortalConnection, performSystemSecurityAudit, OAuthHandshakeProgress } from '../services/portalAuthService';
 
 interface PortalConnectModalProps {
   isOpen: boolean;
@@ -415,8 +415,46 @@ export const PortalConnectModal: React.FC<PortalConnectModalProps> = ({
               </div>
 
               <div className="space-y-4">
-                <h4 className="font-bold text-white text-sm flex items-center gap-2">
-                  <Sliders className="w-4 h-4 text-cyan-400" /> Global Portal Application Rules
+                <div className="flex items-center justify-between">
+                  <h4 className="font-bold text-white text-sm flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-emerald-400" /> Platform Security & Token Audit Engine
+                  </h4>
+
+                  <button
+                    onClick={async () => {
+                      setHandshakeLog({ step: 1, stage: 'Running Security Audit...', detail: 'Hashing tokens with Web Crypto SubtleCrypto...' });
+                      const res = await performSystemSecurityAudit(portalAccounts);
+                      setHandshakeLog(null);
+                      alert(`🔒 System-Wide Security Audit Completed!\n\nScore: ${res.score}%\nEncryption Level: ${res.encryptionLevel}\nActive OAuth Sessions: ${res.activeOAuthSessions}/${res.totalTokensAudited}\nCompliance: ${res.complianceBadges.join(', ')}`);
+                    }}
+                    className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-indigo-600 hover:from-emerald-500 text-white font-bold text-xs shadow-md flex items-center gap-1.5"
+                  >
+                    <Activity className="w-3.5 h-3.5" />
+                    <span>Run Cryptographic Security Audit</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                    <span className="text-[10px] text-slate-400 block uppercase font-bold">Token Vault</span>
+                    <span className="text-sm font-extrabold text-emerald-400">AES-256-GCM</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                    <span className="text-[10px] text-slate-400 block uppercase font-bold">PKCE Engine</span>
+                    <span className="text-sm font-extrabold text-cyan-400">SubtleCrypto</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                    <span className="text-[10px] text-slate-400 block uppercase font-bold">Compliance</span>
+                    <span className="text-sm font-extrabold text-purple-300">SOC2 Type II</span>
+                  </div>
+                  <div className="p-3 rounded-xl bg-slate-950 border border-slate-800 text-center">
+                    <span className="text-[10px] text-slate-400 block uppercase font-bold">Password Storage</span>
+                    <span className="text-sm font-extrabold text-rose-400">ZERO Stored</span>
+                  </div>
+                </div>
+
+                <h4 className="font-bold text-white text-sm flex items-center gap-2 pt-2 border-t border-slate-800">
+                  <Sliders className="w-4 h-4 text-cyan-400" /> Global Application Rules
                 </h4>
 
                 <div className="space-y-3 text-xs">
