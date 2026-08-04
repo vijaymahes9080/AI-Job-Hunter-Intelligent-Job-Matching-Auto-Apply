@@ -214,3 +214,71 @@ export interface RecruiterCandidate {
   resumeFileName: string;
   appliedJobTitle: string;
 }
+
+export interface InterviewQuestion {
+  id: string;
+  topic: string;
+  question: string;
+  modelAnswer: string;
+  starTips: string;
+  keyKeywords: string[];
+}
+
+export interface InterviewSession {
+  id: string;
+  targetRole: string;
+  questions: InterviewQuestion[];
+  currentQuestionIndex: number;
+  userAnswers: Record<string, { answer: string; score: number; feedback: string; wpm: number; fillerCount: number }>;
+  totalScore: number;
+  status: 'In Progress' | 'Completed';
+  createdAt: string;
+}
+
+export interface AgentScoutConfig {
+  enabled: boolean;
+  minMatchScore: number;
+  autoTailorResume: boolean;
+  autoApplyQueue: boolean;
+  webhookUrl: string;
+  webhookPlatform: 'Discord' | 'Slack' | 'Telegram' | 'Custom API';
+  checkIntervalMinutes: number;
+}
+
+export interface AgentScoutLog {
+  id: string;
+  timestamp: string;
+  message: string;
+  type: 'scan' | 'match' | 'tailor' | 'webhook';
+}
+
+export interface ATSScoreCard {
+  overallScore: number;
+  formattingScore: number;
+  keywordScore: number;
+  sectionScore: number;
+  readabilityScore: number;
+  detectedIssues: string[];
+  missingKeywords: string[];
+  overusedKeywords: string[];
+  recommendations: string[];
+}
+
+export interface ContributionDay {
+  date: string;
+  count: number;
+  level: 0 | 1 | 2 | 3 | 4;
+}
+
+export interface SalaryBenchmark {
+  role: string;
+  location: string;
+  p25: number;
+  p50: number;
+  p75: number;
+  p90: number;
+  currency: string;
+  suggestedEquity: string;
+  suggestedBonus: string;
+}
+

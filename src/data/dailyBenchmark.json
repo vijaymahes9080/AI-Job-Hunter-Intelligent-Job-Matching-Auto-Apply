@@ -1,0 +1,19 @@
+{
+  "timestamp": "2026-08-04T01:39:20.159Z",
+  "activePortals": [
+    "LinkedIn",
+    "Naukri",
+    "Indeed",
+    "Foundit",
+    "Wellfound",
+    "Glassdoor",
+    "Greenhouse",
+    "Lever",
+    "Ashby"
+  ],
+  "totalSimulatedJobs": 1420,
+  "atsRulesetVersion": "2.4.0",
+  "faissVectorDimensions": 768,
+  "dailyCommitSurgeMultiplier": 10,
+  "status": "HEALTHY"
+}

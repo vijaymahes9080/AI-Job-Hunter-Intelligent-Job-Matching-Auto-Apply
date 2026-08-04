@@ -12,7 +12,13 @@ import {
   Layers,
   Sparkles,
   UserCheck,
-  Sliders
+  Sliders,
+  Mic,
+  Radio,
+  ShieldAlert,
+  Flame,
+  DollarSign,
+  Globe
 } from 'lucide-react';
 import type { CandidateProfile, NotificationItem, UserRole, SubscriptionTier } from '../types';
 
@@ -40,6 +46,7 @@ interface NavbarProps {
   onOpenSubscription: () => void;
   onOpenWizard: () => void;
   onMarkNotificationsRead: () => void;
+  onOpenChromeExtension: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -57,18 +64,24 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenAuth,
   onOpenSubscription,
   onOpenWizard,
-  onMarkNotificationsRead
+  onMarkNotificationsRead,
+  onOpenChromeExtension
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
 
   const jobSeekerNav: NavItem[] = [
     { id: 'dashboard', label: 'Dashboard', icon: BarChart3 },
-    { id: 'jobs', label: 'Job Aggregator', icon: Search, badge: '9 Portals' },
-    { id: 'profile', label: 'Candidate Profile', icon: User },
-    { id: 'auto-apply', label: 'Auto-Apply Queue', icon: CheckCircle2, badge: 'Approval First' },
-    { id: 'cover-letter', label: 'Cover Letter Studio', icon: Layers },
+    { id: 'jobs', label: 'Jobs', icon: Search, badge: '9 Portals' },
+    { id: 'profile', label: 'Profile', icon: User },
+    { id: 'auto-apply', label: 'Auto-Apply', icon: CheckCircle2, badge: 'Approval First' },
+    { id: 'cover-letter', label: 'Cover Letter', icon: Layers },
+    { id: 'interview-sim', label: 'AI Interview', icon: Mic, highlight: true },
+    { id: 'agent-scout', label: 'Agent Scout', icon: Radio, badge: 'Autonomous' },
+    { id: 'ats-auditor', label: 'ATS Heatmap', icon: ShieldAlert },
+    { id: 'contributions', label: '10x Activity', icon: Flame, highlight: true },
+    { id: 'salary-neg', label: 'Salary Negotiator', icon: DollarSign },
     { id: 'applications', label: 'Tracker', icon: Briefcase },
-    { id: 'ai-assistant', label: 'AI Assistant', icon: Bot, highlight: true },
+    { id: 'ai-assistant', label: 'AI Assistant', icon: Bot },
     { id: 'analytics', label: 'Analytics', icon: BarChart3 },
   ];
 
@@ -119,6 +132,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>1-Click Quick Setup</span>
+          </button>
+
+          {/* Chrome Extension Modal Launcher */}
+          <button
+            onClick={onOpenChromeExtension}
+            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs border border-amber-500/30"
+          >
+            <Globe className="w-3.5 h-3.5 text-amber-400" />
+            <span>Chrome Ext</span>
           </button>
         </div>
 

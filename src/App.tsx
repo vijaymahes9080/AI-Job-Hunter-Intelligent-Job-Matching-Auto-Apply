@@ -14,6 +14,12 @@ import { AdminPanel } from './components/AdminPanel';
 import { QuickStartWizard } from './components/QuickStartWizard';
 import { RecruiterPortal } from './components/RecruiterPortal';
 import { SubscriptionModal } from './components/SubscriptionModal';
+import { AIInterviewSimulator } from './components/AIInterviewSimulator';
+import { AgentScoutControl } from './components/AgentScoutControl';
+import { ATSScoreAuditor } from './components/ATSScoreAuditor';
+import { ContributionTracker } from './components/ContributionTracker';
+import { ChromeExtensionModal } from './components/ChromeExtensionModal';
+import { SalaryNegotiator } from './components/SalaryNegotiator';
 
 import type { Job, CandidateProfile, ApplicationItem, NotificationItem, AIModelConfig, ApplicationStatus, UserRole, SubscriptionTier } from './types';
 import { 
@@ -48,6 +54,7 @@ export function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [quickWizardOpen, setQuickWizardOpen] = useState(false);
   const [subscriptionModalOpen, setSubscriptionModalOpen] = useState(false);
+  const [chromeModalOpen, setChromeModalOpen] = useState(false);
 
   // Initialize and compute AI match scores for jobs on profile change
   useEffect(() => {
@@ -134,6 +141,7 @@ export function App() {
         onOpenSubscription={() => setSubscriptionModalOpen(true)}
         onOpenWizard={() => setQuickWizardOpen(true)}
         onMarkNotificationsRead={handleMarkNotificationsRead}
+        onOpenChromeExtension={() => setChromeModalOpen(true)}
       />
 
       {/* Main Page Workspace */}
@@ -196,6 +204,42 @@ export function App() {
                 jobs={jobs}
                 profile={profile}
                 initialJob={selectedJobModal}
+              />
+            )}
+
+            {activeTab === 'interview-sim' && (
+              <AIInterviewSimulator 
+                profile={profile}
+                onDeductCredit={() => setAiCredits(prev => Math.max(0, prev - 1))}
+              />
+            )}
+
+            {activeTab === 'agent-scout' && (
+              <AgentScoutControl 
+                jobs={jobs}
+                onTriggerAutoApply={(job) => {
+                  setActiveTab('auto-apply');
+                }}
+              />
+            )}
+
+            {activeTab === 'ats-auditor' && (
+              <ATSScoreAuditor 
+                profile={profile}
+                onUpdateProfile={handleSaveProfile}
+              />
+            )}
+
+            {activeTab === 'contributions' && (
+              <ContributionTracker 
+                applications={applications}
+              />
+            )}
+
+            {activeTab === 'salary-neg' && (
+              <SalaryNegotiator 
+                profile={profile}
+                onDeductCredit={() => setAiCredits(prev => Math.max(0, prev - 1))}
               />
             )}
 
@@ -276,6 +320,12 @@ export function App() {
         currentTier={subscriptionTier}
         onSelectTier={(tier) => setSubscriptionTier(tier)}
       />
+
+      <ChromeExtensionModal 
+        isOpen={chromeModalOpen}
+        onClose={() => setChromeModalOpen(false)}
+      />
     </div>
   );
 }
+

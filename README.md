@@ -55,8 +55,27 @@ Aggregates job listings in real-time from 9 top job portals & ATS platforms:
 - Review customized resumes and auto-filled screening answers before 1-click submission.
 - Animated application transmission simulator with celebration confetti!
 
-### 7. 🏢 Multi-Role SaaS Architecture
-- **Job Seeker Workspace**: Candidate dashboard, job search, resume studio, auto-apply queue, application tracker, AI career coach.
+### 7. 🎙️ AI Technical Mock Interviewer Studio
+- Interactive AI Interview Simulator with browser speech synthesis and voice input support.
+- Role-specific question generator with STAR framework scoring, confidence gauge, WPM pace tracking, and filler word detection.
+
+### 8. 🤖 Autonomous Multi-Agent Job Scout & Webhooks
+- 24/7 background agent scouting simulated job feeds, auto-tailoring resumes for >85% matches, and dispatching real-time Webhook notifications (Discord, Slack, Telegram).
+
+### 9. 🛡️ Visual ATS Resume Heatmap & Audit Studio
+- Parses uploaded resumes for Applicant Tracking System (ATS) readability score, keyword density heatmap, formatting risks, and 1-click ATS auto-repair.
+
+### 10. 📈 10x Daily Contribution Activity & GitHub Sync Engine
+- In-app 365-day contribution heatmap tracking application submissions and interview practice, backed by automated Node.js benchmark sync scripts (`scripts/generate_contributions.js`) and GitHub Action workflows.
+
+### 11. 🌐 Ready-to-Load Manifest V3 Chrome Extension Exporter
+- 1-Click downloader for Manifest V3 Chrome Extension source code to scrape job details directly from LinkedIn, Indeed, and Glassdoor into the workspace.
+
+### 12. 💰 AI Salary & Offer Negotiation Copilot
+- Regional salary percentiles breakdown (25th, 50th, 75th, 90th), equity calculator, and tailored counter-offer email generator.
+
+### 13. 🏢 Multi-Role SaaS Architecture
+- **Job Seeker Workspace**: Candidate dashboard, job search, resume studio, interview simulator, agent scout, auto-apply queue, tracker, AI career coach.
 - **Recruiter & Hiring Hub**: Post job openings, search candidate pool, and view AI match rankings.
 - **SaaS Admin Center**: AI model configuration, similarity metrics, multi-tenant workspace controls, and audit logs.
 
