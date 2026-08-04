@@ -10,46 +10,91 @@ const KEYS = {
 };
 
 export function loadProfile(): CandidateProfile {
-  const data = localStorage.getItem(KEYS.PROFILE);
-  return data ? JSON.parse(data) : INITIAL_CANDIDATE_PROFILE;
+  try {
+    const data = localStorage.getItem(KEYS.PROFILE);
+    return data ? JSON.parse(data) : INITIAL_CANDIDATE_PROFILE;
+  } catch (e) {
+    console.warn('Failed to parse profile from localStorage, using initial profile fallback', e);
+    return INITIAL_CANDIDATE_PROFILE;
+  }
 }
 
 export function saveProfile(profile: CandidateProfile): void {
-  localStorage.setItem(KEYS.PROFILE, JSON.stringify(profile));
+  try {
+    localStorage.setItem(KEYS.PROFILE, JSON.stringify(profile));
+  } catch (e) {
+    console.error('Failed to save profile to localStorage', e);
+  }
 }
 
 export function loadJobs(): Job[] {
-  const data = localStorage.getItem(KEYS.JOBS);
-  return data ? JSON.parse(data) : INITIAL_JOBS;
+  try {
+    const data = localStorage.getItem(KEYS.JOBS);
+    return data ? JSON.parse(data) : INITIAL_JOBS;
+  } catch (e) {
+    console.warn('Failed to parse jobs from localStorage, using initial jobs fallback', e);
+    return INITIAL_JOBS;
+  }
 }
 
 export function saveJobs(jobs: Job[]): void {
-  localStorage.setItem(KEYS.JOBS, JSON.stringify(jobs));
+  try {
+    localStorage.setItem(KEYS.JOBS, JSON.stringify(jobs));
+  } catch (e) {
+    console.error('Failed to save jobs to localStorage', e);
+  }
 }
 
 export function loadApplications(): ApplicationItem[] {
-  const data = localStorage.getItem(KEYS.APPLICATIONS);
-  return data ? JSON.parse(data) : INITIAL_APPLICATIONS;
+  try {
+    const data = localStorage.getItem(KEYS.APPLICATIONS);
+    return data ? JSON.parse(data) : INITIAL_APPLICATIONS;
+  } catch (e) {
+    console.warn('Failed to parse applications from localStorage, using initial apps fallback', e);
+    return INITIAL_APPLICATIONS;
+  }
 }
 
 export function saveApplications(apps: ApplicationItem[]): void {
-  localStorage.setItem(KEYS.APPLICATIONS, JSON.stringify(apps));
+  try {
+    localStorage.setItem(KEYS.APPLICATIONS, JSON.stringify(apps));
+  } catch (e) {
+    console.error('Failed to save applications to localStorage', e);
+  }
 }
 
 export function loadNotifications(): NotificationItem[] {
-  const data = localStorage.getItem(KEYS.NOTIFICATIONS);
-  return data ? JSON.parse(data) : INITIAL_NOTIFICATIONS;
+  try {
+    const data = localStorage.getItem(KEYS.NOTIFICATIONS);
+    return data ? JSON.parse(data) : INITIAL_NOTIFICATIONS;
+  } catch (e) {
+    console.warn('Failed to parse notifications from localStorage, using initial notifs fallback', e);
+    return INITIAL_NOTIFICATIONS;
+  }
 }
 
 export function saveNotifications(notifs: NotificationItem[]): void {
-  localStorage.setItem(KEYS.NOTIFICATIONS, JSON.stringify(notifs));
+  try {
+    localStorage.setItem(KEYS.NOTIFICATIONS, JSON.stringify(notifs));
+  } catch (e) {
+    console.error('Failed to save notifications to localStorage', e);
+  }
 }
 
 export function loadAIConfig(): AIModelConfig {
-  const data = localStorage.getItem(KEYS.CONFIG);
-  return data ? JSON.parse(data) : INITIAL_AI_CONFIG;
+  try {
+    const data = localStorage.getItem(KEYS.CONFIG);
+    return data ? JSON.parse(data) : INITIAL_AI_CONFIG;
+  } catch (e) {
+    console.warn('Failed to parse AI config from localStorage, using initial config fallback', e);
+    return INITIAL_AI_CONFIG;
+  }
 }
 
 export function saveAIConfig(config: AIModelConfig): void {
-  localStorage.setItem(KEYS.CONFIG, JSON.stringify(config));
+  try {
+    localStorage.setItem(KEYS.CONFIG, JSON.stringify(config));
+  } catch (e) {
+    console.error('Failed to save AI config to localStorage', e);
+  }
 }
