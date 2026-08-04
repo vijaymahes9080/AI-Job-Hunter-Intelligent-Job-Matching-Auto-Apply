@@ -3,7 +3,7 @@ export function generateExtensionFiles() {
     {
       manifest_version: 3,
       name: "AI Job Hunter Direct Scraper & Matcher",
-      version: "2.0.0",
+      version: "1.0.0",
       description: "1-Click job posting scraper & real-time ATS match analyzer for LinkedIn, Indeed, Glassdoor, and Greenhouse.",
       permissions: ["activeTab", "scripting", "storage"],
       action: {
