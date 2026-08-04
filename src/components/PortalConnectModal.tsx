@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, CheckCircle2, ShieldCheck, RefreshCw, Zap, ExternalLink, Sliders, AlertCircle, Key, Lock, Activity, ChevronRight } from 'lucide-react';
 import type { PortalAccount, JobSource, CandidateProfile } from '../types';
-import { executeRealtimeOAuthHandshake, testLivePortalConnection, performSystemSecurityAudit, OAuthHandshakeProgress } from '../services/portalAuthService';
+import { executeRealtimeOAuthHandshake, testLivePortalConnection, performSystemSecurityAudit, openLivePortalOAuthPopup, OAuthHandshakeProgress } from '../services/portalAuthService';
 
 interface PortalConnectModalProps {
   isOpen: boolean;
@@ -379,23 +379,33 @@ export const PortalConnectModal: React.FC<PortalConnectModalProps> = ({
                           </button>
                         </>
                       ) : (
-                        <button
-                          onClick={() => handleConnectToggle(account)}
-                          disabled={isConnecting}
-                          className="w-full py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-indigo-500/20"
-                        >
-                          {isConnecting ? (
-                            <>
-                              <RefreshCw className="w-3.5 h-3.5 animate-spin text-white" />
-                              <span>PKCE OAuth Handshake...</span>
-                            </>
-                          ) : (
-                            <>
-                              <ShieldCheck className="w-3.5 h-3.5" />
-                              <span>Authorize {account.portal} OAuth 2.0</span>
-                            </>
-                          )}
-                        </button>
+                        <div className="flex items-center gap-2 w-full">
+                          <button
+                            onClick={() => handleConnectToggle(account)}
+                            disabled={isConnecting}
+                            className="flex-1 py-2 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-indigo-500/20"
+                          >
+                            {isConnecting ? (
+                              <>
+                                <RefreshCw className="w-3.5 h-3.5 animate-spin text-white" />
+                                <span>PKCE Handshake...</span>
+                              </>
+                            ) : (
+                              <>
+                                <ShieldCheck className="w-3.5 h-3.5" />
+                                <span>Authorize {account.portal}</span>
+                              </>
+                            )}
+                          </button>
+
+                          <button
+                            onClick={() => openLivePortalOAuthPopup(account.portal)}
+                            title={`Launch live ${account.portal} authentication window`}
+                            className="p-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-indigo-500/50 text-indigo-400 hover:text-white transition-colors"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
                       )}
                     </div>
                   </div>
