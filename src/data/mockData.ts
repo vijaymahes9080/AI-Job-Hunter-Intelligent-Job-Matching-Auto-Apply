@@ -1,82 +1,29 @@
 import type { Job, CandidateProfile, AIModelConfig, ApplicationItem, NotificationItem, RecruiterCandidate } from '../types';
 
 export const INITIAL_CANDIDATE_PROFILE: CandidateProfile = {
-  name: 'Vijay Kumar',
-  email: 'vijay.k@example.com',
-  phone: '+91 98765 43210',
-  location: 'Bengaluru, India',
-  headline: 'Senior Full Stack AI Engineer | React, Node.js, Python, OpenAI & LLM Systems',
-  summary: 'Passionate AI & Full Stack Engineer with 5+ years of experience building high-concurrency web platforms, LLM agents, and semantic search systems. Adept in React, TypeScript, Python FastAPI, PostgreSQL, and modern cloud deployment.',
-  profilePhoto: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-  skills: [
-    'React', 'TypeScript', 'Node.js', 'Python', 'FastAPI', 
-    'OpenAI API', 'Tailwind CSS', 'PostgreSQL', 'MongoDB', 
-    'Docker', 'GraphQL', 'Next.js', 'Redis', 'Git', 'REST API'
-  ],
-  experience: [
-    {
-      id: 'exp-1',
-      title: 'Senior AI Software Engineer',
-      company: 'Apex AI Labs',
-      duration: '2023 - Present (2 yrs)',
-      description: 'Architected automated AI workflows, integrated OpenAI & LangChain pipelines, improved frontend render performance by 40%, and managed vector database indexes for semantic matching.'
-    },
-    {
-      id: 'exp-2',
-      title: 'Full Stack Engineer',
-      company: 'CloudSphere Systems',
-      duration: '2021 - 2023 (2 yrs)',
-      description: 'Developed scalable React & Node.js microservices serving 500k monthly active users. Integrated payment gateways, Redis caching, and automated deployment pipelines.'
-    }
-  ],
-  education: [
-    {
-      id: 'edu-1',
-      degree: 'B.Tech in Computer Science & Engineering',
-      institution: 'Indian Institute of Technology (IIT), Madras',
-      year: '2017 - 2021'
-    }
-  ],
-  certifications: [
-    {
-      id: 'cert-1',
-      name: 'AWS Certified Solutions Architect',
-      issuer: 'Amazon Web Services',
-      year: '2023'
-    },
-    {
-      id: 'cert-2',
-      name: 'Deep Learning Specialization',
-      issuer: 'DeepLearning.AI / Coursera',
-      year: '2022'
-    }
-  ],
-  projects: [
-    {
-      id: 'proj-1',
-      title: 'AI Job Hunter Agent',
-      description: 'Autonomous job matching and application assistant using BERT sentence transformers and automated ATS keyword tailoring.',
-      technologies: ['React', 'TypeScript', 'FastAPI', 'FAISS', 'Tailwind CSS']
-    },
-    {
-      id: 'proj-2',
-      title: 'Enterprise Code Review Bot',
-      description: 'GitHub bot that parses pull requests and generates security vulnerability reports using fine-tuned Llama models.',
-      technologies: ['Python', 'Docker', 'OpenAI', 'Node.js']
-    }
-  ],
-  languages: ['English (Native/Fluent)', 'Hindi (Fluent)', 'Tamil (Conversational)'],
-  preferredRoles: ['Senior Frontend Engineer', 'Full Stack AI Developer', 'AI Solutions Engineer', 'Lead React Developer'],
-  preferredLocations: ['Bengaluru', 'Remote', 'Hyderabad', 'Mumbai'],
-  preferredSalaryMin: 2800000, // ₹28 LPA
+  name: '',
+  email: '',
+  phone: '',
+  location: '',
+  headline: 'Upload your resume or connect your profile to personalize job matching',
+  summary: '',
+  profilePhoto: undefined,
+  skills: [],
+  experience: [],
+  education: [],
+  certifications: [],
+  projects: [],
+  languages: [],
+  preferredRoles: [],
+  preferredLocations: [],
+  preferredSalaryMin: 0,
   noticePeriodDays: 30,
   workplacePreference: ['Remote', 'Hybrid'],
   companyTypePreference: ['Startup', 'MNC', 'Enterprise'],
-  linkedinSynced: true,
-  githubSynced: true,
-  resumeFileName: 'Vijay_Kumar_Resume_AI_Engineer.pdf',
-  resumeFileText: `Vijay Kumar - Senior Full Stack AI Engineer
-Email: vijay.k@example.com | Phone: +91 98765 43210 | Bengaluru, India`
+  linkedinSynced: false,
+  githubSynced: false,
+  resumeFileName: undefined,
+  resumeFileText: undefined
 };
 
 export const INITIAL_JOBS: Job[] = [
@@ -98,20 +45,20 @@ export const INITIAL_JOBS: Job[] = [
     skillsRequired: ['React', 'TypeScript', 'Node.js', 'Python', 'OpenAI API', 'FastAPI', 'Tailwind CSS'],
     educationRequired: 'B.Tech / B.E. in Computer Science or equivalent',
     description: 'We are seeking an exceptional Lead AI & Full Stack Engineer to spearhead our next-generation generative AI workforce platform.',
-    benefits: ['100% Remote Work', 'Stock Options (ESOPs)', 'Unlimited PTO', 'Comprehensive Health Insurance'],
-    applyUrl: 'https://linkedin.com/jobs/view/3920191',
+    benefits: ['Equity Options', 'Health Insurance', 'Remote Work Budget', 'Learning Allowance'],
+    applyUrl: 'https://linkedin.com/jobs/view/39102931',
     sourcePortal: 'LinkedIn',
     postedTime: '2 hours ago',
-    deadline: '2026-08-25',
+    deadline: '2026-08-30'
   },
   {
     id: 'job-102',
     title: 'Senior Frontend Developer - AI Products',
-    company: 'MindTickle / Tech Mahindra',
-    companyRating: 4.5,
-    companyLogo: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=120&q=80',
-    location: 'Bengaluru, Karnataka',
-    workplaceType: 'Hybrid',
+    company: 'Neural Labs Inc',
+    companyRating: 4.7,
+    companyLogo: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=120&q=80',
+    location: 'Remote',
+    workplaceType: 'Remote',
     jobType: 'Full-Time',
     companyType: 'MNC',
     salaryMin: 2800000,
@@ -119,71 +66,51 @@ export const INITIAL_JOBS: Job[] = [
     salaryCurrency: 'INR',
     experienceMin: 3,
     experienceMax: 6,
-    skillsRequired: ['React', 'TypeScript', 'Next.js', 'Redux Toolkit', 'Tailwind CSS', 'GraphQL'],
-    educationRequired: 'Bachelor degree in Engineering',
-    description: 'Looking for a Senior Frontend Developer to lead UI engineering for our sales enablement AI platform.',
-    benefits: ['Hybrid Work Model', 'Performance Bonus', 'Wellness Allowance'],
-    applyUrl: 'https://naukri.com/job/senior-frontend-developer-ai',
-    sourcePortal: 'Naukri',
-    postedTime: '5 hours ago',
-    deadline: '2026-08-30',
+    skillsRequired: ['React', 'TypeScript', 'Tailwind CSS', 'Redux', 'REST API', 'GraphQL'],
+    educationRequired: 'Bachelor Degree in Engineering or Computer Applications',
+    description: 'Join Neural Labs to build intuitive user interfaces for enterprise AI assistants and real-time streaming LLM applications.',
+    benefits: ['100% Remote', 'Flexible Hours', 'Annual Retreat', 'Wellness Stipend'],
+    applyUrl: 'https://greenhouse.io/neurallabs/jobs/89201',
+    sourcePortal: 'Greenhouse',
+    postedTime: '4 hours ago',
+    deadline: '2026-08-25'
   },
   {
     id: 'job-103',
-    title: 'Senior Full Stack Software Engineer',
-    company: 'Zomato AI Technologies',
-    companyRating: 4.3,
-    companyLogo: 'https://images.unsplash.com/photo-1572021335469-31706a17aaef?auto=format&fit=crop&w=120&q=80',
-    location: 'Gurugram / Remote',
-    workplaceType: 'Remote',
+    title: 'AI Solutions & Fullstack Architect',
+    company: 'Cognitive Flow AI',
+    companyRating: 4.8,
+    companyLogo: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=120&q=80',
+    location: 'Hyderabad, India',
+    workplaceType: 'Hybrid',
     jobType: 'Full-Time',
     companyType: 'Enterprise',
-    salaryMin: 3000000,
-    salaryMax: 4200000,
+    salaryMin: 3500000,
+    salaryMax: 5000000,
     salaryCurrency: 'INR',
-    experienceMin: 4,
-    experienceMax: 8,
-    skillsRequired: ['React', 'Node.js', 'Python', 'PostgreSQL', 'Docker', 'Redis', 'TypeScript'],
-    educationRequired: 'BS/MS in Computer Science',
-    description: 'Zomato is hiring Senior Engineers for our Core Logistics & Intelligence Team.',
-    benefits: ['Food Allowance & Coupons', 'Flexible Working Hours', 'Insurance'],
-    applyUrl: 'https://indeed.com/viewjob?jk=89230192',
-    sourcePortal: 'Indeed',
+    experienceMin: 5,
+    experienceMax: 9,
+    skillsRequired: ['Python', 'FastAPI', 'React', 'TypeScript', 'FAISS', 'OpenAI API', 'Docker', 'PostgreSQL'],
+    educationRequired: 'B.Tech/M.Tech in CS or AI/ML',
+    description: 'Designing end-to-end RAG architecture, vector search indexes, and microservice backend serving large language model API endpoints.',
+    benefits: ['Relocation Allowance', 'Bonus Structure', 'Top Tier Health Cover'],
+    applyUrl: 'https://lever.co/cognitiveflow/jobs/77321',
+    sourcePortal: 'Lever',
     postedTime: '1 day ago',
-    deadline: '2026-09-01',
+    deadline: '2026-09-05'
   }
 ];
 
-export const INITIAL_APPLICATIONS: ApplicationItem[] = [
-  {
-    id: 'app-1',
-    jobId: 'job-101',
-    jobTitle: 'Lead AI & Full Stack React Engineer',
-    company: 'Anthropic Systems',
-    sourcePortal: 'LinkedIn',
-    status: 'Submitted',
-    matchScore: 96,
-    tailoredResumeId: 'res-v1',
-    coverLetterId: 'cl-1',
-    appliedAt: '2026-08-02 14:30',
-    screeningAnswers: {
-      'Years of Experience with React': '5',
-      'Expected CTC': '₹36,000,000 / year',
-      'Notice Period': '30 Days'
-    },
-    notes: 'Submitted via OAuth direct integration.'
-  }
-];
+export const INITIAL_APPLICATIONS: ApplicationItem[] = [];
 
 export const INITIAL_NOTIFICATIONS: NotificationItem[] = [
   {
-    id: 'notif-1',
-    title: '🎉 Interview Invitation!',
-    message: 'Cognitive Flow AI scheduled an interview for Founding AI Engineer.',
-    type: 'interview',
-    timestamp: '10 minutes ago',
-    read: false,
-    jobId: 'job-105'
+    id: 'notif-welcome',
+    title: '👋 Welcome to AI Job Hunter',
+    message: 'Upload your resume or click 1-Click Quick Setup to personalize your profile and start auto-applying to top jobs!',
+    type: 'system',
+    timestamp: 'Just now',
+    read: false
   }
 ];
 

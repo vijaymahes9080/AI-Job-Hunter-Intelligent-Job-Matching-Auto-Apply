@@ -292,6 +292,29 @@ export const CandidateProfileView: React.FC<CandidateProfileProps> = ({
                 className="w-full px-4 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white"
               />
             </div>
+
+            <div className="pt-4 border-t border-slate-800 flex items-center justify-between gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  if (confirm('Clear all stored data to connect your own profile and resume?')) {
+                    localStorage.clear();
+                    window.location.reload();
+                  }
+                }}
+                className="px-4 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 font-bold hover:bg-rose-500/20 text-xs transition-colors"
+              >
+                🧹 Reset Cache for Personalization
+              </button>
+
+              <button
+                type="button"
+                onClick={() => onSaveProfile(formData)}
+                className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 text-white font-bold text-xs flex items-center gap-1.5 shadow-lg shadow-indigo-500/25"
+              >
+                <Save className="w-4 h-4" /> Save Profile Preferences
+              </button>
+            </div>
           </div>
         </div>
       </div>
