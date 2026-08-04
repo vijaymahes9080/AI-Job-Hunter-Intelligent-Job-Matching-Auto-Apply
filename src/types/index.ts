@@ -113,6 +113,8 @@ export interface CandidateProfile {
   githubSynced: boolean;
   resumeFileName?: string;
   resumeFileText?: string;
+  linkedPortals?: PortalAccount[];
+  isPurged?: boolean;
 }
 
 export interface ResumeDiff {
@@ -155,6 +157,19 @@ export type ApplicationStatus =
   | 'Offer Extended' 
   | 'Rejected';
 
+export interface PortalAccount {
+  id: string;
+  portal: JobSource;
+  status: 'Connected' | 'Disconnected' | 'Connecting' | 'Action Required';
+  accountEmail: string;
+  connectedAt: string;
+  lastSyncAt: string;
+  autoApplyEnabled: boolean;
+  oauthScope?: string;
+  authMethod: 'OAuth 2.0' | 'API Key' | 'Session Token' | 'Cookie Handshake';
+  avatarUrl?: string;
+}
+
 export interface ApplicationItem {
   id: string;
   jobId: string;
@@ -163,10 +178,15 @@ export interface ApplicationItem {
   sourcePortal: JobSource;
   status: ApplicationStatus;
   matchScore: number;
+  atsScore?: number;
+  tailoredBulletPoints?: string[];
+  cultureMatch?: string;
   tailoredResumeId: string;
   coverLetterId: string;
+  coverLetterContent?: string;
   appliedAt: string;
   screeningAnswers: Record<string, string>;
+  submissionToken?: string;
   interviewDate?: string;
   notes?: string;
 }

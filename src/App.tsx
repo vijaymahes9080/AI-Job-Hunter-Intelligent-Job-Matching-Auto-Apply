@@ -20,8 +20,12 @@ import { ATSScoreAuditor } from './components/ATSScoreAuditor';
 import { ContributionTracker } from './components/ContributionTracker';
 import { ChromeExtensionModal } from './components/ChromeExtensionModal';
 import { SalaryNegotiator } from './components/SalaryNegotiator';
+import { PortalConnectModal } from './components/PortalConnectModal';
+import { PassiveReviewDrawer } from './components/PassiveReviewDrawer';
 
-import type { Job, CandidateProfile, ApplicationItem, NotificationItem, AIModelConfig, ApplicationStatus, UserRole, SubscriptionTier } from './types';
+import type { Job, CandidateProfile, ApplicationItem, NotificationItem, AIModelConfig, ApplicationStatus, UserRole, SubscriptionTier, PortalAccount } from './types';
+import { DEFAULT_PORTAL_ACCOUNTS } from './data/mockData';
+import { runAutonomousPipelineForJob } from './services/autonomousEngine';
 import { 
   loadProfile, 
   saveProfile, 
@@ -48,6 +52,7 @@ export function App() {
   const [applications, setApplications] = useState<ApplicationItem[]>(loadApplications());
   const [notifications, setNotifications] = useState<NotificationItem[]>(loadNotifications());
   const [aiConfig, setAiConfig] = useState<AIModelConfig>(loadAIConfig());
+  const [portalAccounts, setPortalAccounts] = useState<PortalAccount[]>(profile.linkedPortals || DEFAULT_PORTAL_ACCOUNTS);
 
   // Modals state
   const [selectedJobModal, setSelectedJobModal] = useState<Job | null>(null);
@@ -55,6 +60,8 @@ export function App() {
   const [quickWizardOpen, setQuickWizardOpen] = useState(false);
   const [subscriptionModalOpen, setSubscriptionModalOpen] = useState(false);
   const [chromeModalOpen, setChromeModalOpen] = useState(false);
+  const [portalConnectOpen, setPortalConnectOpen] = useState(false);
+  const [passiveReviewOpen, setPassiveReviewOpen] = useState(false);
 
   const [autoPilotActive, setAutoPilotActive] = useState<boolean>(true);
 
@@ -82,23 +89,8 @@ export function App() {
 
       if (suitableJobs.length > 0) {
         const topJob = suitableJobs[0];
-        const newApp: ApplicationItem = {
-          id: `auto-app-${Date.now()}`,
-          jobId: topJob.id,
-          jobTitle: topJob.title,
-          company: topJob.company,
-          sourcePortal: topJob.sourcePortal,
-          status: 'Submitted',
-          matchScore: topJob.matchScore?.overallPercentage || 92,
-          tailoredResumeId: `resume-auto-${Date.now()}`,
-          coverLetterId: `cover-auto-${Date.now()}`,
-          appliedAt: new Date().toLocaleString(),
-          screeningAnswers: {
-            'Notice Period': `${profile.noticePeriodDays} Days`,
-            'Expected Salary': `₹${(profile.preferredSalaryMin/100000).toFixed(0)} LPA`
-          },
-          notes: '🤖 Automatically submitted by Zero-Intervention Autonomous Auto-Pilot daemon while you were away.'
-        };
+        const pipelineResult = runAutonomousPipelineForJob(profile, topJob, portalAccounts);
+        const newApp = pipelineResult.application;
 
         const updatedApps = [newApp, ...applications];
         setApplications(updatedApps);
@@ -106,8 +98,8 @@ export function App() {
 
         const newNotif: NotificationItem = {
           id: `notif-auto-${Date.now()}`,
-          title: '🤖 Autonomous Auto-Pilot Submission',
-          message: `Zero-human intervention: Automatically tailored ATS resume & submitted application for ${topJob.title} at ${topJob.company} (${topJob.matchScore?.overallPercentage || 92}% match). Review anytime at your convenience!`,
+          title: `🤖 Auto-Submitted via ${topJob.sourcePortal}`,
+          message: `Zero-human intervention: Tailored ATS resume (${pipelineResult.atsScore}% target score), cover letter & screening answers for ${topJob.title} at ${topJob.company}. Review in Passive Review Log anytime!`,
           type: 'high_match',
           timestamp: 'Just now',
           read: false,
@@ -121,7 +113,7 @@ export function App() {
     }, 4000);
 
     return () => clearTimeout(timer);
-  }, [autoPilotActive, jobs, applications, profile, notifications]);
+  }, [autoPilotActive, jobs, applications, profile, notifications, portalAccounts]);
 
   // Handlers
   const handleSaveProfile = (updated: CandidateProfile) => {
@@ -198,8 +190,11 @@ export function App() {
         onOpenWizard={() => setQuickWizardOpen(true)}
         onMarkNotificationsRead={handleMarkNotificationsRead}
         onOpenChromeExtension={() => setChromeModalOpen(true)}
+        onOpenPortalConnect={() => setPortalConnectOpen(true)}
+        onOpenPassiveReview={() => setPassiveReviewOpen(true)}
         autoPilotActive={autoPilotActive}
         setAutoPilotActive={setAutoPilotActive}
+        submittedCount={applications.length}
       />
 
       {/* Main Page Workspace */}
@@ -244,6 +239,7 @@ export function App() {
                 profile={profile}
                 onSaveProfile={handleSaveProfile}
                 onOpenAuth={() => setAuthModalOpen(true)}
+                onOpenPortalConnect={() => setPortalConnectOpen(true)}
               />
             )}
 
@@ -382,6 +378,24 @@ export function App() {
       <ChromeExtensionModal 
         isOpen={chromeModalOpen}
         onClose={() => setChromeModalOpen(false)}
+      />
+
+      <PortalConnectModal 
+        isOpen={portalConnectOpen}
+        onClose={() => setPortalConnectOpen(false)}
+        portalAccounts={portalAccounts}
+        onUpdatePortals={(updated) => {
+          setPortalAccounts(updated);
+          handleSaveProfile({ ...profile, linkedPortals: updated });
+        }}
+        onImportProfile={handleImportLinkedIn}
+      />
+
+      <PassiveReviewDrawer 
+        isOpen={passiveReviewOpen}
+        onClose={() => setPassiveReviewOpen(false)}
+        applications={applications}
+        onUpdateStatus={handleUpdateAppStatus}
       />
     </div>
   );

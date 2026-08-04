@@ -30,71 +30,69 @@
 
 ## 🌟 Key Features
 
-### 1. ⚡ 1-Click Guided Quick Start Wizard (Zero-Knowledge Mode)
-- A 3-step automated wizard (**Connect/Upload -> Target Role -> 1-Click Launch**) designed for users without domain knowledge.
-- Automatically aggregates jobs across 9 portals, extracts resume skills, tailors ATS resumes, and queues applications for 1-click approval.
+### 1. 🤖 Zero-Human Autonomous Application Engine
+- Background daemon that operates with **ZERO human intervention** to scout postings across 9 portals.
+- 5-step automated background pipeline for matches ≥80%:
+  1. **Auto-Match**: Skill gap and seniority delta extraction.
+  2. **Auto-Tailor ATS Resume**: Rewrites bullet points to achieve **>90% ATS parser target score**.
+  3. **Auto-Generate Cover Letter**: Culture-tailored letters matching company type (Startup vs MNC).
+  4. **Auto-Fill Screening Answers**: Pre-fills notice period, compensation expectations, work authorization, relocation preference, and primary skill fit.
+  5. **Auto-Submit Application**: Transmits bundle through portal OAuth/API boundaries with submission transaction receipts.
 
-### 2. 🌐 Multi-Portal Job Aggregator
-Aggregates job listings in real-time from 9 top job portals & ATS platforms:
-- **LinkedIn Jobs**
-- **Naukri**
-- **Indeed**
-- **Foundit (Monster)**
-- **Wellfound (AngelList)**
-- **Glassdoor**
-- **Greenhouse**
-- **Lever**
-- **Ashby**
-- **Company Career Pages**
+### 2. 🌐 9-Portal Account Linker (`PortalConnectModal.tsx`)
+- Direct account connection & authorization management for **9 major job portals**:
+  - **LinkedIn Jobs** (OAuth 2.0 Direct Auth)
+  - **Naukri** (Session Token / Mobile Handshake)
+  - **Indeed** (Partner OAuth)
+  - **Glassdoor** (API Auth Key)
+  - **Greenhouse** (Candidate OAuth)
+  - **Lever** (Candidate OAuth)
+  - **Ashby** (Candidate OAuth)
+  - **Foundit / Monster** (Monster API Sync)
+  - **Wellfound / AngelList** (AngelList Talent OAuth)
+- Features Auto-Apply permission toggles per portal and 1-Click Profile Sync.
 
-### 3. 🎯 AI Semantic Match Engine (0 - 100%)
+### 3. 🧹 Clean Slate & Personalization Purge Engine
+- Purges sample data, mock applications, and candidate profiles with 1 click (`purgeAllData()`).
+- Zero manual entry: Automatically derives candidate profile and skill matrix from uploaded PDF/DOCX resumes or connected LinkedIn OAuth profile.
+
+### 4. 📬 Passive User Review Log (`PassiveReviewDrawer.tsx`)
+- Silently logs all background-submitted applications in LocalStorage.
+- Provides a live notification badge in the top Navbar so users can review submitted applications, tailored ATS resumes (>90% target score), culture cover letters, screening answers, and portal submission receipts at their convenience.
+
+### 5. ⚡ 1-Click Guided Quick Start Wizard (Zero-Knowledge Mode)
+- A 3-step automated wizard (**Connect/Upload -> Target Role -> 1-Click Launch**) designed for users without technical domain knowledge.
+
+### 6. 🎯 AI Semantic Match Engine (0 - 100%)
 - Uses **Sentence Transformers (BERT)** and **FAISS Vector Cosine Similarity** to compare candidate profiles against job descriptions.
-- Transparent, explainable breakdown matrix showing:
-  - **Matching Candidate Skills** (Green chips)
-  - **Missing Skills to Highlight** (Amber chips)
-  - **Experience Level Gap Analysis**
-  - **Salary Overlap & Location Match Score**
+- Transparent, explainable breakdown matrix showing matching candidate skills, missing skills, experience gap, salary overlap, and location fit.
 
-### 4. 📄 AI ATS Resume Tailoring Studio
-- Generates 3 ATS-Optimized tailored resume variants per job:
-  - **Version 1**: ATS Keyword-Optimized (High parser score)
-  - **Version 2**: Technical Deep-Dive Focus
-  - **Version 3**: Business Impact & Leadership
-- Real-time diff view highlighting exact reworded bullet points and AI rationales.
+### 7. 📄 AI ATS Resume Tailoring Studio
+- Generates 3 ATS-Optimized tailored resume variants per job with real-time diff views.
 
-### 5. ✍️ Multi-Tone Cover Letter Generator
-- Auto-generates customized cover letters in 5 distinct tones:
-  - **Professional**, **Friendly**, **Formal**, **Startup**, **Enterprise**.
-- Live interactive editor with 1-click clipboard copy.
+### 8. ✍️ Multi-Tone Cover Letter Generator
+- Auto-generates customized cover letters in 5 distinct tones (Professional, Friendly, Formal, Startup, Enterprise).
 
-### 6. 🛡️ Approval-First Auto-Apply Queue
-- Human-in-the-loop application queue adhering strictly to portal OAuth boundaries and terms of service.
-- Review customized resumes and auto-filled screening answers before 1-click submission.
-- Animated application transmission simulator with celebration confetti!
+### 9. 🎙️ AI Technical Mock Interviewer Studio
+- Interactive AI Interview Simulator with browser speech synthesis,STAR framework evaluation, WPM pace tracking, and filler word detection.
 
-### 7. 🎙️ AI Technical Mock Interviewer Studio
-- Interactive AI Interview Simulator with browser speech synthesis and voice input support.
-- Role-specific question generator with STAR framework scoring, confidence gauge, WPM pace tracking, and filler word detection.
+### 10. 🤖 Autonomous Multi-Agent Job Scout & Webhooks
+- 24/7 background agent scouting simulated job feeds with live Webhook alerts (Discord, Slack, Telegram).
 
-### 8. 🤖 Autonomous Multi-Agent Job Scout & Webhooks
-- 24/7 background agent scouting simulated job feeds, auto-tailoring resumes for >85% matches, and dispatching real-time Webhook notifications (Discord, Slack, Telegram).
+### 11. 🛡️ Visual ATS Resume Heatmap & Audit Studio
+- Parses uploaded resumes for ATS readability score, keyword density heatmap, and 1-click ATS auto-repair.
 
-### 9. 🛡️ Visual ATS Resume Heatmap & Audit Studio
-- Parses uploaded resumes for Applicant Tracking System (ATS) readability score, keyword density heatmap, formatting risks, and 1-click ATS auto-repair.
+### 12. 📈 10x Daily Contribution Activity & GitHub Sync Engine
+- In-app 365-day contribution heatmap tracking application submissions and interview practice.
 
-### 10. 📈 10x Daily Contribution Activity & GitHub Sync Engine
-- In-app 365-day contribution heatmap tracking application submissions and interview practice, backed by automated Node.js benchmark sync scripts (`scripts/generate_contributions.js`) and GitHub Action workflows.
+### 13. 🌐 Manifest V3 Chrome Extension Exporter
+- Downloader for Chrome Extension source code to scrape job details directly from LinkedIn, Indeed, and Glassdoor.
 
-### 11. 🌐 Ready-to-Load Manifest V3 Chrome Extension Exporter
-- 1-Click downloader for Manifest V3 Chrome Extension source code to scrape job details directly from LinkedIn, Indeed, and Glassdoor into the workspace.
-
-### 12. 💰 AI Salary & Offer Negotiation Copilot
+### 14. 💰 AI Salary & Offer Negotiation Copilot
 - Regional salary percentiles breakdown (25th, 50th, 75th, 90th), equity calculator, and tailored counter-offer email generator.
 
-### 13. 🏢 Multi-Role SaaS Architecture
-- **Job Seeker Workspace**: Candidate dashboard, job search, resume studio, interview simulator, agent scout, auto-apply queue, tracker, AI career coach.
-- **Recruiter & Hiring Hub**: Post job openings, search candidate pool, and view AI match rankings.
-- **SaaS Admin Center**: AI model configuration, similarity metrics, multi-tenant workspace controls, and audit logs.
+### 15. 🏢 Multi-Role SaaS Architecture
+- **Job Seeker Workspace**, **Recruiter & Hiring Hub**, **SaaS Admin Center**.
 
 ### 8. 💳 Subscription Tiers & AI Credit Meter
 - Multi-tier membership (**Free**, **Pro $29/mo**, **Premium $79/mo**).
@@ -209,15 +207,18 @@ AI-Job-Hunter/
 │   │   ├── AIChatAssistant.tsx # Interactive AI Chatbot & Mock Interview Coach
 │   │   ├── AnalyticsView.tsx  # Dynamic Recharts Analytics Visuals
 │   │   ├── AdminPanel.tsx     # AI Models, Vector Indexes & Logs
+│   │   ├── PortalConnectModal.tsx # 9-Portal Account Linker & OAuth Security Manager
+│   │   ├── PassiveReviewDrawer.tsx # Passive Application & Tailored Resume Log Drawer
 │   │   ├── QuickStartWizard.tsx # 1-Click Guided Wizard for Zero-Knowledge Users
 │   │   ├── RecruiterPortal.tsx # Hiring Manager Candidate Sourcing Hub
 │   │   └── SubscriptionModal.tsx # SaaS Pricing Tiers & Credit Top-Up
 │   ├── services/              # Core Services & AI Engines
+│   │   ├── autonomousEngine.ts# 5-Step Zero-Human Autonomous Pipeline Engine
 │   │   ├── aiMatchEngine.ts   # BERT & FAISS Similarity Calculation
 │   │   ├── resumeOptimizer.ts # ATS Resume Tailoring Engine (v1, v2, v3)
 │   │   ├── coverLetterGenerator.ts # Multi-Tone Cover Letter Generator
 │   │   ├── resumeParser.ts    # PDF/DOCX Text Extractor
-│   │   └── storage.ts         # LocalStorage Persistence Helper
+│   │   └── storage.ts         # LocalStorage Persistence & Clean Slate Purge Helper
 │   ├── types/                 # TypeScript Interfaces & Models
 │   ├── data/                  # Initial Multi-Portal Jobs & Mock Data
 │   ├── App.tsx                # Main Application Orchestrator

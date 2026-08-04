@@ -1,4 +1,98 @@
-import type { Job, CandidateProfile, AIModelConfig, ApplicationItem, NotificationItem, RecruiterCandidate } from '../types';
+import type { Job, CandidateProfile, AIModelConfig, ApplicationItem, NotificationItem, RecruiterCandidate, PortalAccount } from '../types';
+
+export const DEFAULT_PORTAL_ACCOUNTS: PortalAccount[] = [
+  {
+    id: 'portal-linkedin',
+    portal: 'LinkedIn',
+    status: 'Connected',
+    accountEmail: 'candidate.ai@linkedin-auth.io',
+    connectedAt: '2026-08-01',
+    lastSyncAt: 'Just now',
+    autoApplyEnabled: true,
+    oauthScope: 'r_liteprofile r_emailaddress w_member_social r_fullprofile_apply',
+    authMethod: 'OAuth 2.0'
+  },
+  {
+    id: 'portal-naukri',
+    portal: 'Naukri',
+    status: 'Connected',
+    accountEmail: 'candidate.naukri@gmail.com',
+    connectedAt: '2026-08-02',
+    lastSyncAt: '10 mins ago',
+    autoApplyEnabled: true,
+    authMethod: 'Session Token'
+  },
+  {
+    id: 'portal-indeed',
+    portal: 'Indeed',
+    status: 'Connected',
+    accountEmail: 'candidate.indeed@auth.com',
+    connectedAt: '2026-08-03',
+    lastSyncAt: '5 mins ago',
+    autoApplyEnabled: true,
+    authMethod: 'OAuth 2.0'
+  },
+  {
+    id: 'portal-glassdoor',
+    portal: 'Glassdoor',
+    status: 'Disconnected',
+    accountEmail: '',
+    connectedAt: 'Not Connected',
+    lastSyncAt: 'Never',
+    autoApplyEnabled: false,
+    authMethod: 'API Key'
+  },
+  {
+    id: 'portal-greenhouse',
+    portal: 'Greenhouse',
+    status: 'Connected',
+    accountEmail: 'candidate.dev@greenhouse-api.com',
+    connectedAt: '2026-08-01',
+    lastSyncAt: '1 hour ago',
+    autoApplyEnabled: true,
+    authMethod: 'OAuth 2.0'
+  },
+  {
+    id: 'portal-lever',
+    portal: 'Lever',
+    status: 'Connected',
+    accountEmail: 'candidate.lever@auth.io',
+    connectedAt: '2026-08-01',
+    lastSyncAt: '30 mins ago',
+    autoApplyEnabled: true,
+    authMethod: 'OAuth 2.0'
+  },
+  {
+    id: 'portal-ashby',
+    portal: 'Ashby',
+    status: 'Connected',
+    accountEmail: 'candidate.ashby@api.com',
+    connectedAt: '2026-08-02',
+    lastSyncAt: '15 mins ago',
+    autoApplyEnabled: true,
+    authMethod: 'OAuth 2.0'
+  },
+  {
+    id: 'portal-foundit',
+    portal: 'Foundit',
+    status: 'Disconnected',
+    accountEmail: '',
+    connectedAt: 'Not Connected',
+    lastSyncAt: 'Never',
+    autoApplyEnabled: false,
+    authMethod: 'Session Token'
+  },
+  {
+    id: 'portal-wellfound',
+    portal: 'Wellfound',
+    status: 'Connected',
+    accountEmail: 'candidate.wellfound@angel.co',
+    connectedAt: '2026-08-03',
+    lastSyncAt: '2 hours ago',
+    autoApplyEnabled: true,
+    authMethod: 'OAuth 2.0'
+  }
+];
 
 export const INITIAL_CANDIDATE_PROFILE: CandidateProfile = {
   name: '',
@@ -23,7 +117,9 @@ export const INITIAL_CANDIDATE_PROFILE: CandidateProfile = {
   linkedinSynced: false,
   githubSynced: false,
   resumeFileName: undefined,
-  resumeFileText: undefined
+  resumeFileText: undefined,
+  linkedPortals: DEFAULT_PORTAL_ACCOUNTS,
+  isPurged: false
 };
 
 export const INITIAL_JOBS: Job[] = [

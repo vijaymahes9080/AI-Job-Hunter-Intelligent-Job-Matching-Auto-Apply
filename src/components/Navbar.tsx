@@ -47,8 +47,11 @@ interface NavbarProps {
   onOpenWizard: () => void;
   onMarkNotificationsRead: () => void;
   onOpenChromeExtension: () => void;
+  onOpenPortalConnect?: () => void;
+  onOpenPassiveReview?: () => void;
   autoPilotActive: boolean;
   setAutoPilotActive: (ap: boolean) => void;
+  submittedCount?: number;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -68,8 +71,11 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenWizard,
   onMarkNotificationsRead,
   onOpenChromeExtension,
+  onOpenPortalConnect,
+  onOpenPassiveReview,
   autoPilotActive,
-  setAutoPilotActive
+  setAutoPilotActive,
+  submittedCount = 0
 }) => {
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -129,23 +135,32 @@ export const Navbar: React.FC<NavbarProps> = ({
             </div>
           </div>
 
-          {/* 1-Click Quick Start Launcher for Non-Technical Users */}
-          <button
-            onClick={onOpenWizard}
-            className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-500 to-indigo-600 hover:from-emerald-400 text-white font-extrabold text-xs shadow-md shadow-emerald-500/20"
-          >
-            <Sparkles className="w-3.5 h-3.5" />
-            <span>1-Click Quick Setup</span>
-          </button>
+          {/* 9-Portal Linker Modal Launcher */}
+          {onOpenPortalConnect && (
+            <button
+              onClick={onOpenPortalConnect}
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 font-bold text-xs border border-purple-500/40"
+            >
+              <Globe className="w-3.5 h-3.5 text-purple-400" />
+              <span>Link 9 Portals</span>
+            </button>
+          )}
 
-          {/* Chrome Extension Modal Launcher */}
-          <button
-            onClick={onOpenChromeExtension}
-            className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-bold text-xs border border-amber-500/30"
-          >
-            <Globe className="w-3.5 h-3.5 text-amber-400" />
-            <span>Chrome Ext</span>
-          </button>
+          {/* Passive Review Drawer Launcher */}
+          {onOpenPassiveReview && (
+            <button
+              onClick={onOpenPassiveReview}
+              className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-indigo-950/80 hover:bg-indigo-900/80 text-cyan-300 font-bold text-xs border border-indigo-500/40 relative"
+            >
+              <Bot className="w-3.5 h-3.5 text-cyan-400" />
+              <span>Passive Review</span>
+              {submittedCount > 0 && (
+                <span className="px-1.5 py-0.2 rounded-full bg-purple-500 text-white text-[9px] font-extrabold">
+                  {submittedCount}
+                </span>
+              )}
+            </button>
+          )}
         </div>
 
         {/* Navigation Tabs */}

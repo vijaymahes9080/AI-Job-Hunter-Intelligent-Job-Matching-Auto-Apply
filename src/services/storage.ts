@@ -12,7 +12,17 @@ const KEYS = {
 export function loadProfile(): CandidateProfile {
   try {
     const data = localStorage.getItem(KEYS.PROFILE);
-    return data ? JSON.parse(data) : INITIAL_CANDIDATE_PROFILE;
+    if (data) {
+      const parsed = JSON.parse(data);
+      if (parsed.name === 'Vijay Kumar' || parsed.email === 'vijay.k@example.com') {
+        localStorage.removeItem(KEYS.PROFILE);
+        localStorage.removeItem(KEYS.APPLICATIONS);
+        localStorage.removeItem(KEYS.NOTIFICATIONS);
+        return INITIAL_CANDIDATE_PROFILE;
+      }
+      return parsed;
+    }
+    return INITIAL_CANDIDATE_PROFILE;
   } catch (e) {
     console.warn('Failed to parse profile from localStorage, using initial profile fallback', e);
     return INITIAL_CANDIDATE_PROFILE;
@@ -97,4 +107,21 @@ export function saveAIConfig(config: AIModelConfig): void {
   } catch (e) {
     console.error('Failed to save AI config to localStorage', e);
   }
+}
+
+export function purgeAllData(): CandidateProfile {
+  try {
+    localStorage.removeItem(KEYS.PROFILE);
+    localStorage.removeItem(KEYS.APPLICATIONS);
+    localStorage.removeItem(KEYS.NOTIFICATIONS);
+    localStorage.removeItem(KEYS.JOBS);
+  } catch (e) {
+    console.error('Failed to clear localStorage during purge', e);
+  }
+  const cleanProfile: CandidateProfile = {
+    ...INITIAL_CANDIDATE_PROFILE,
+    isPurged: true
+  };
+  saveProfile(cleanProfile);
+  return cleanProfile;
 }

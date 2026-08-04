@@ -8,21 +8,27 @@ import {
   FileText, 
   Briefcase, 
   Code,
-  Save
+  Save,
+  Globe,
+  RefreshCw,
+  Sparkles
 } from 'lucide-react';
 import type { CandidateProfile as ICandidateProfile } from '../types';
 import { parseResumeFile } from '../services/resumeParser';
+import { purgeAllData } from '../services/storage';
 
 interface CandidateProfileProps {
   profile: ICandidateProfile;
   onSaveProfile: (updated: ICandidateProfile) => void;
   onOpenAuth: () => void;
+  onOpenPortalConnect?: () => void;
 }
 
 export const CandidateProfileView: React.FC<CandidateProfileProps> = ({
   profile,
   onSaveProfile,
-  onOpenAuth
+  onOpenAuth,
+  onOpenPortalConnect
 }) => {
   const [formData, setFormData] = useState<ICandidateProfile>(profile);
   const [newSkill, setNewSkill] = useState('');
@@ -102,7 +108,17 @@ export const CandidateProfileView: React.FC<CandidateProfileProps> = ({
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          {onOpenPortalConnect && (
+            <button
+              onClick={onOpenPortalConnect}
+              className="px-4 py-2.5 rounded-xl bg-purple-600/20 hover:bg-purple-600/30 text-purple-300 border border-purple-500/40 text-xs font-bold flex items-center gap-2 shadow-md"
+            >
+              <Globe className="w-4 h-4 text-purple-400" />
+              <span>Link 9 Job Portals</span>
+            </button>
+          )}
+
           <button
             onClick={onOpenAuth}
             className="px-4 py-2.5 rounded-xl bg-[#0a66c2] hover:bg-[#084e96] text-white text-xs font-bold flex items-center gap-2 shadow-md"
@@ -110,7 +126,7 @@ export const CandidateProfileView: React.FC<CandidateProfileProps> = ({
             <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
               <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
             </svg>
-            <span>Re-Sync LinkedIn</span>
+            <span>Sync LinkedIn</span>
           </button>
 
           <button
@@ -297,14 +313,15 @@ export const CandidateProfileView: React.FC<CandidateProfileProps> = ({
               <button
                 type="button"
                 onClick={() => {
-                  if (confirm('Clear all stored data to connect your own profile and resume?')) {
-                    localStorage.clear();
+                  if (confirm('🧹 Clean Slate & Personalization Purge:\nAre you sure you want to purge all pre-existing sample profiles and cached candidate records for a clean slate?')) {
+                    const clean = purgeAllData();
+                    setFormData(clean);
                     window.location.reload();
                   }
                 }}
-                className="px-4 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 font-bold hover:bg-rose-500/20 text-xs transition-colors"
+                className="px-4 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-400 font-bold hover:bg-rose-500/20 text-xs transition-colors flex items-center gap-1.5"
               >
-                🧹 Reset Cache for Personalization
+                <span>🧹 Clean Slate & Personalization Purge</span>
               </button>
 
               <button
