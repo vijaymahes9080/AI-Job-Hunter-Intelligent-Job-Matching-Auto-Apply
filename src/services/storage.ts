@@ -14,13 +14,13 @@ export function loadProfile(): CandidateProfile {
     const data = localStorage.getItem(KEYS.PROFILE);
     if (data) {
       const parsed = JSON.parse(data);
-      if (parsed.name === 'Vijay Kumar' || parsed.email === 'vijay.k@example.com') {
+      if (parsed.name === 'Vijay Kumar' || parsed.email === 'vijay.k@example.com' || parsed.headline?.includes('connect your pr')) {
         localStorage.removeItem(KEYS.PROFILE);
         localStorage.removeItem(KEYS.APPLICATIONS);
         localStorage.removeItem(KEYS.NOTIFICATIONS);
         return INITIAL_CANDIDATE_PROFILE;
       }
-      return parsed;
+      return { ...INITIAL_CANDIDATE_PROFILE, ...parsed };
     }
     return INITIAL_CANDIDATE_PROFILE;
   } catch (e) {
