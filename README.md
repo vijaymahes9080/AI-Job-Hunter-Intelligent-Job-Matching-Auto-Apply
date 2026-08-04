@@ -11,6 +11,23 @@
 
 ---
 
+## 🎨 Visual Platform Showcase
+
+![AI Job Hunter Dashboard](public/images/dashboard_mockup.png)
+*SaaS Candidate Dashboard with BERT Vector Similarity Metrics, Job Matching Pipeline, and Portal Aggregator.*
+
+<br/>
+
+![AI Technical Mock Interviewer](public/images/interview_simulator_mockup.png)
+*AI Technical Mock Interviewer Studio with STAR Framework Evaluation & Live Audio Voice Feedback.*
+
+<br/>
+
+![Autonomous Multi-Agent Job Scout](public/images/agent_scout_mockup.png)
+*Autonomous Multi-Agent Job Scout Control Hub with Live Webhook Alerts (Discord, Slack, Telegram).*
+
+---
+
 ## 🌟 Key Features
 
 ### 1. ⚡ 1-Click Guided Quick Start Wizard (Zero-Knowledge Mode)
