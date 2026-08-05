@@ -100,7 +100,9 @@
 
 ---
 
-## 🏗️ Platform Architecture
+## 🏗️ Platform Architecture & Enterprise Blueprint
+
+> 📄 **Enterprise Architecture Specification**: Full production microservices system design, PostgreSQL 16 DDL schemas, `pgvector` HNSW vector search indexes, OpenAPI 3.0 specs, Kubernetes Helm manifests, and multi-agent AI workflows are documented in [enterprise_architecture_blueprint.md](file:///C:/Users/vijay/.gemini/antigravity-ide/brain/9d120f3f-d295-4576-80bc-d77d7b1c3eab/enterprise_architecture_blueprint.md).
 
 ```text
                            AI JOB HUNTER PLATFORM
