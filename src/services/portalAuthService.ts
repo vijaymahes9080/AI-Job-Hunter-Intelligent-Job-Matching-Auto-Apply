@@ -24,9 +24,9 @@ export interface SecurityAuditResult {
   }>;
 }
 
-/** Canonical OAuth 2.0 authorization endpoints for each portal */
+/** Canonical OAuth 2.0 authorization endpoints & login pages for each portal */
 export const LIVE_PORTAL_OAUTH_URLS: Record<JobSource, string> = {
-  LinkedIn:         'https://www.linkedin.com/oauth/v2/authorization',
+  LinkedIn:         'https://www.linkedin.com/login',
   Naukri:           'https://www.naukri.com/nlogin/login',
   Indeed:           'https://secure.indeed.com/account/login',
   Glassdoor:        'https://www.glassdoor.com/member/account/index.htm',
@@ -174,7 +174,7 @@ export async function executeRealtimeOAuthHandshake(
 
   if (portal === 'LinkedIn') {
     const clientId = customClientId?.trim() || import.meta.env.VITE_LINKEDIN_CLIENT_ID || '';
-    if (clientId.length > 5) {
+    if (clientId.length > 3) {
       const params = new URLSearchParams({
         response_type:         'code',
         client_id:             clientId,
@@ -186,11 +186,25 @@ export async function executeRealtimeOAuthHandshake(
       });
       authUrl = `https://www.linkedin.com/oauth/v2/authorization?${params}`;
     } else {
-      // No valid client_id — open login page for manual account linkage
+      // No custom client_id provided — open clean login page to connect account without 400 error
       authUrl = LIVE_PORTAL_OAUTH_URLS.LinkedIn;
     }
   } else {
-    authUrl = LIVE_PORTAL_OAUTH_URLS[portal] || 'https://www.linkedin.com/login';
+    const clientId = customClientId?.trim() || import.meta.env[`VITE_${portal.toUpperCase().replace(/\s+/g, '_')}_CLIENT_ID`] || '';
+    const baseUrl = LIVE_PORTAL_OAUTH_URLS[portal] || 'https://www.linkedin.com/login';
+    if (clientId.length > 3) {
+      const params = new URLSearchParams({
+        response_type: 'code',
+        client_id:     clientId,
+        redirect_uri:  redirectUri,
+        state,
+        code_challenge: codeChallenge,
+        code_challenge_method: 'S256'
+      });
+      authUrl = `${baseUrl}?${params}`;
+    } else {
+      authUrl = baseUrl;
+    }
   }
 
   onProgress?.({

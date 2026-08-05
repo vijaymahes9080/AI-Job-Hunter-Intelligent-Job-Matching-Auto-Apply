@@ -338,7 +338,14 @@ export const PortalConnectModal: React.FC<PortalConnectModalProps> = ({
                             placeholder={`Enter ${account.portal} candidate email...`}
                             value={emailInput[account.id] || ''}
                             onChange={(e) => setEmailInput({ ...emailInput, [account.id]: e.target.value })}
-                            className="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                            className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-xs text-white placeholder-slate-600 focus:border-indigo-500 focus:outline-none"
+                          />
+                          <input 
+                            type="text"
+                            placeholder={`OAuth client_id (optional, e.g. 78x94a...)`}
+                            value={clientIdInput[account.id] || ''}
+                            onChange={(e) => setClientIdInput({ ...clientIdInput, [account.id]: e.target.value })}
+                            className="w-full px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800/80 text-[11px] text-white placeholder-slate-600 focus:border-purple-500 focus:outline-none font-mono"
                           />
                         </div>
                       )}
