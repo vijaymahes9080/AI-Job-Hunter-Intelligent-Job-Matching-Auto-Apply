@@ -53,10 +53,6 @@ export const config = {
     apiKey: process.env.LLM_API_KEY || '',
   },
   githubToken: process.env.GITHUB_TOKEN || '',
-  adzuna: {
-    appId: process.env.ADZUNA_APP_ID || '',
-    appKey: process.env.ADZUNA_APP_KEY || '',
-  },
   discovery: {
     enabled: bool(process.env.ENABLE_SCHEDULER, false),
     intervalMinutes: int(process.env.DISCOVERY_INTERVAL_MINUTES, 360),
