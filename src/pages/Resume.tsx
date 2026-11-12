@@ -293,7 +293,7 @@ export function ResumePage() {
             <SectionTitle title="Stored evidence" />
             <dl className="space-y-2 text-[0.7rem]">
               {[
-                ['File', profile?.resumeFileName || 'None'),
+                ['File', profile?.resumeFileName || 'None'],
                 ['Characters', profile ? profile.resumeText.length.toLocaleString() : '0'],
                 ['Last updated', profile?.resumeUpdatedAt ? formatDate(profile.resumeUpdatedAt) : 'Never'],
                 ['GitHub username', profile?.githubUsername || 'Not set'],

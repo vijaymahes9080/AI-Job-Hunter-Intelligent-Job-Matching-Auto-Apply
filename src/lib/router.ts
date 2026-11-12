@@ -8,7 +8,7 @@ import {
   Compass,
   Copy,
   FileText,
-  Github,
+  GitBranch,
   Layers,
   LayoutDashboard,
   Map,
@@ -120,7 +120,7 @@ export const ROUTES: RouteDefinition[] = [
     path: 'github',
     label: 'GitHub Portfolio',
     group: 'Prepare',
-    icon: Github,
+    icon: GitBranch,
     description: 'Public repository evidence matched against published job requirements.',
   },
   {

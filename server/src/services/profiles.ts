@@ -25,7 +25,7 @@ export const EMPTY_PROFILE: Omit<CandidateProfile, 'name' | 'email'> = {
 };
 
 export const DEFAULT_SETTINGS: UserSettings = {
-  theme: 'dark',
+  theme: 'light',
   notifyDeadlines: true,
   notifyMatches: true,
   matchThreshold: 60,
@@ -57,17 +57,20 @@ export async function saveProfile(db: Database, userId: string, profile: Candida
 export async function getSettings(db: Database, userId: string): Promise<UserSettings> {
   const result = await db.query<{ data: string }>('SELECT data FROM settings WHERE user_id = $1', [userId]);
   if (result.rows.length === 0) return DEFAULT_SETTINGS;
-  return { ...DEFAULT_SETTINGS, ...(JSON.parse(result.rows[0].data) as Partial<UserSettings>) };
+  const stored = { ...DEFAULT_SETTINGS, ...(JSON.parse(result.rows[0].data) as Partial<UserSettings>) };
+  // The application ships a single, light-first theme. Normalise legacy rows.
+  return { ...stored, theme: 'light' };
 }
 
 export async function saveSettings(db: Database, userId: string, settings: UserSettings): Promise<UserSettings> {
   const now = new Date().toISOString();
+  const normalised: UserSettings = { ...settings, theme: 'light' };
   await db.query(
     `INSERT INTO settings (user_id, data, updated_at) VALUES ($1, $2, $3)
      ON CONFLICT (user_id) DO UPDATE SET data = $2, updated_at = $3`,
-    [userId, JSON.stringify(settings), now],
+    [userId, JSON.stringify(normalised), now],
   );
-  return settings;
+  return normalised;
 }
 
 export function profileCompleteness(profile: CandidateProfile): number {

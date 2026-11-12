@@ -8,7 +8,7 @@ import { Badge, Button, Card, ErrorNotice, Field, Input, LoadingBlock, PageHeade
 
 export function SkillGapPage() {
   const { profile } = useSession();
-  const latest = useAsync(() => api.skills.gap.latest(), []);
+  const latest = useAsync(() => api.skills.latest(), []);
   const [targetRole, setTargetRole] = useState(profile?.preferredRoles?.[0] || profile?.headline || '');
   const [limit, setLimit] = useState(40);
   const [result, setResult] = useState<SkillGapResult | null>(null);

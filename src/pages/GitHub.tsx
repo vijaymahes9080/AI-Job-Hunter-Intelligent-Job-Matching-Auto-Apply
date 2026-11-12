@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AlertTriangle, CheckCircle2, ExternalLink, Github, GitFork, RefreshCw, Sparkles, Star } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ExternalLink, GitBranch, GitFork, RefreshCw, Sparkles, Star } from 'lucide-react';
 import type { GitHubPortfolioAnalysis } from '../../shared/types';
 import { api, errorMessage } from '../lib/api';
 import { formatDate } from '../lib/format';
@@ -60,7 +60,7 @@ export function GitHubPage() {
           <Field label="Public GitHub username" hint="A server-side GITHUB_TOKEN is optional; unauthenticated requests are rate-limited by GitHub.">
             <Input value={username} onChange={(event) => setUsername(event.target.value)} placeholder="e.g. torvalds" />
           </Field>
-          <Button type="submit" loading={busy}><Github size={14} /> Analyse</Button>
+          <Button type="submit" loading={busy}><GitBranch size={14} /> Analyse</Button>
         </form>
       </Card>
 
@@ -72,7 +72,7 @@ export function GitHubPage() {
           <Card className="glass-highlight p-4">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <div className="flex items-center gap-3">
-                {analysis.profile.avatarUrl ? <img src={analysis.profile.avatarUrl} alt="" className="h-12 w-12 rounded-xl border border-[var(--border)]" /> : <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--surface-2)]"><Github size={22} /></div>}
+                {analysis.profile.avatarUrl ? <img src={analysis.profile.avatarUrl} alt="" className="h-12 w-12 rounded-xl border border-[var(--border)]" /> : <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--surface-2)]"><GitBranch size={22} /></div>}
                 <div>
                   <div className="text-lg font-bold text-[var(--text)]">{analysis.profile.name || analysis.username}</div>
                   <a href={analysis.profile.htmlUrl} target="_blank" rel="noreferrer noopener" className="text-[0.68rem] text-[var(--accent)] hover:underline">github.com/{analysis.username}</a>
@@ -126,7 +126,7 @@ export function GitHubPage() {
                     </div>
                   ))}
                 </div>
-                {analysis.repos.length === 0 ? <EmptyState icon={<Github size={18} />} title="No public repositories returned" description="The username may have no public repositories, or GitHub may be rate-limiting this server." /> : null}
+                {analysis.repos.length === 0 ? <EmptyState icon={<GitBranch size={18} />} title="No public repositories returned" description="The username may have no public repositories, or GitHub may be rate-limiting this server." /> : null}
               </Card>
 
               <Card className="p-4">
@@ -196,10 +196,10 @@ export function GitHubPage() {
       ) : !busy ? (
         <Card className="p-6">
           <EmptyState
-            icon={<Github size={20} />}
+            icon={<GitBranch size={20} />}
             title="No portfolio analysis yet"
             description="Add your public GitHub username and run the analysis. The platform will not access private repositories or invent project evidence."
-            action={<Button onClick={analyze} loading={busy}><Github size={14} /> Analyse portfolio</Button>}
+            action={<Button onClick={analyze} loading={busy}><GitBranch size={14} /> Analyse portfolio</Button>}
           />
         </Card>
       ) : null}

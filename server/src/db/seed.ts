@@ -61,7 +61,7 @@ const DEMO_PROFILE: CandidateProfile = {
 };
 
 const DEMO_SETTINGS: UserSettings = {
-  theme: 'dark',
+  theme: 'light',
   notifyDeadlines: true,
   notifyMatches: true,
   matchThreshold: 60,

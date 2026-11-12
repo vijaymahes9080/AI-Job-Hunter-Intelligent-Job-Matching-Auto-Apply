@@ -23,18 +23,18 @@ interface SessionState {
 const SessionContext = createContext<SessionState | null>(null);
 
 const DEFAULT_SETTINGS: UserSettings = {
-  theme: 'dark',
+  theme: 'light',
   notifyDeadlines: true,
   notifyMatches: true,
   matchThreshold: 60,
   weeklyDigest: true,
 };
 
-function applyTheme(theme: 'dark' | 'light') {
+function applyLightTheme() {
   const root = document.documentElement;
-  root.classList.toggle('light', theme === 'light');
-  root.classList.toggle('dark', theme === 'dark');
-  localStorage.setItem('ajh-theme', theme);
+  root.classList.add('light');
+  root.classList.remove('dark');
+  localStorage.setItem('ajh-theme', 'light');
 }
 
 export function SessionProvider({ children }: { children: ReactNode }) {
@@ -47,17 +47,16 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const stored = localStorage.getItem('ajh-theme');
-    applyTheme(stored === 'light' ? 'light' : 'dark');
+    applyLightTheme();
   }, []);
 
   const applySession = useCallback((session: SessionResponse) => {
     setUser(session.user);
     setProfileState(session.profile);
-    setSettingsState(session.settings || DEFAULT_SETTINGS);
+    setSettingsState({ ...(session.settings || DEFAULT_SETTINGS), theme: 'light' });
     setDemo(Boolean(session.demo));
     setCompleteness(session.profileCompleteness ?? 0);
-    applyTheme(session.settings?.theme === 'light' ? 'light' : 'dark');
+    applyLightTheme();
     setStatus('authenticated');
     setError(null);
   }, []);
@@ -136,8 +135,8 @@ export function SessionProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setSettings = useCallback((next: UserSettings) => {
-    setSettingsState(next);
-    applyTheme(next.theme === 'light' ? 'light' : 'dark');
+    setSettingsState({ ...next, theme: 'light' });
+    applyLightTheme();
   }, []);
 
   const value = useMemo<SessionState>(
