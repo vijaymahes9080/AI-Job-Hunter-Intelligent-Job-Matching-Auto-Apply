@@ -1,5 +1,4 @@
 import type { EmploymentType, JobPosting, SalaryRange, SourcePortal, WorkplaceType } from '../../../shared/types.js';
-import { config } from '../config.js';
 import type { Database } from '../db/index.js';
 import { logger } from '../logger.js';
 import {

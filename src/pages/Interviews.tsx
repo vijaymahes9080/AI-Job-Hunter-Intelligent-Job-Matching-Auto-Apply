@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ArrowRight, CheckCircle2, ChevronRight, MessageSquareText, Play, RotateCcw, Send, Sparkles, Target } from 'lucide-react';
+import { ArrowRight, CheckCircle2, ChevronRight, MessageSquareText, Play, RotateCcw, Send, Target } from 'lucide-react';
 import type { Difficulty, InterviewQuestion, InterviewSession } from '../../shared/types';
 import { api, errorMessage } from '../lib/api';
 import { formatDate, relativeTime } from '../lib/format';

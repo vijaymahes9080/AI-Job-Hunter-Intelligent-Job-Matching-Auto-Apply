@@ -32,7 +32,6 @@ import { createDatabase, type Database } from './db/index.js';
 import { seedDemoData } from './db/seed.js';
 import { AppError } from './errors.js';
 import { asyncHandler, errorHandler, notFound, originGuard, requestContext, validate } from './middleware.js';
-import { logger } from './logger.js';
 import { buildAnalytics } from './services/analytics.js';
 import {
   approveApplication,

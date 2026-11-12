@@ -1,0 +1,38 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: jobhunter
+      POSTGRES_USER: jobhunter
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-jobhunter-local}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jobhunter -d jobhunter"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "8787:8787"
+    environment:
+      NODE_ENV: production
+      PORT: 8787
+      APP_URL: http://localhost:8787
+      DATABASE_URL: postgresql://jobhunter:${POSTGRES_PASSWORD:-jobhunter-local}@db:5432/jobhunter
+      JWT_SECRET: ${JWT_SECRET:-local-only-change-this-secret-before-deploying}
+      ALLOW_DEMO_DB: "false"
+      SEED_DEMO: "true"
+      ENABLE_SCHEDULER: "true"
+      DISCOVERY_INTERVAL_MINUTES: "360"
+      TRUST_PROXY: "true"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  pgdata:

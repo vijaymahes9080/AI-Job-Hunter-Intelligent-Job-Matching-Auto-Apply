@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react';
-import { BellRing, CalendarCheck2, CalendarClock, CheckCircle2, RefreshCw, ShieldQuestion, XCircle } from 'lucide-react';
+import { BellRing, CalendarCheck2, CalendarClock, CheckCircle2, ShieldQuestion, XCircle } from 'lucide-react';
 import type { DeadlineBoardItem } from '../../shared/types';
 import { api, errorMessage } from '../lib/api';
 import { deadlineLabel, formatDateTime } from '../lib/format';
 import { useAsync } from '../lib/useAsync';
-import { Badge, Button, Card, ErrorNotice, Field, Input, LoadingBlock, Modal, PageHeader, SectionTitle, StatCard, Tabs } from '../components/ui';
+import { Badge, Button, Card, ErrorNotice, Field, Input, LoadingBlock, Modal, PageHeader, StatCard, Tabs } from '../components/ui';
 
 type StatusFilter = 'all' | 'Closing Soon' | 'Open' | 'Needs Verification' | 'Not Specified' | 'Deadline Passed';
 

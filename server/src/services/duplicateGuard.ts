@@ -73,7 +73,6 @@ export async function checkDuplicates(
     }
   }
 
-  const activeExact = exact.filter((match) => match.status !== 'Withdrawn');
   const withdrawnExact = exact.filter((match) => match.status === 'Withdrawn');
   const blocked = exact.length > 0;
   const canOverride = !blocked && similar.length > 0;

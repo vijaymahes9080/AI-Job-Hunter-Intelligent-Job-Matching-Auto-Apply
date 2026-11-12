@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { AlertTriangle, CheckCircle2, ExternalLink, GitBranch, GitFork, RefreshCw, Sparkles, Star } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, GitBranch, RefreshCw, Sparkles, Star } from 'lucide-react';
 import type { GitHubPortfolioAnalysis } from '../../shared/types';
 import { api, errorMessage } from '../lib/api';
 import { formatDate } from '../lib/format';

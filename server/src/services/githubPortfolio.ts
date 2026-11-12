@@ -96,7 +96,6 @@ async function analyzeRepo(repo: GitHubRepoApi): Promise<GitHubRepoEvidence> {
 
   const languages = languagesResponse.ok ? ((await languagesResponse.json()) as Record<string, number>) : {};
   const root = rootContents.ok ? ((await rootContents.json()) as Array<{ name: string; type: string }>) : [];
-  const workflowFiles = workflows.ok && Array.isArray(await workflows.clone().json().catch(() => [])) ? workflows : null;
   let hasWorkflows = false;
   if (workflows.ok) {
     const parsed = (await workflows.json().catch(() => [])) as unknown;

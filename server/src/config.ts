@@ -32,7 +32,10 @@ export const config = {
   env: process.env.NODE_ENV || 'development',
   isProduction,
   port: int(process.env.PORT, 8787),
-  appUrl: process.env.APP_URL || 'http://localhost:5173',
+  appUrl:
+    process.env.APP_URL ||
+    process.env.RENDER_EXTERNAL_URL ||
+    (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:5173'),
   databaseUrl,
   demoDb: !databaseUrl && allowDemoDb,
   allowDemoDb,

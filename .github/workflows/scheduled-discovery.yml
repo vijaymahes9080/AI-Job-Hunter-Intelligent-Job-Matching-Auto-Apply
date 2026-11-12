@@ -1,0 +1,30 @@
+name: Scheduled discovery
+
+# Optional deployment-level automation. Configure repository secrets:
+#   APP_URL      e.g. https://ai-job-hunter.onrender.com
+#   CRON_SECRET  same value as the server's CRON_SECRET
+# The workflow exits cleanly when the secrets are not configured.
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  cron:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger discovery and deadline scan
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          if [ -z "$APP_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "APP_URL or CRON_SECRET is not configured; skipping scheduled discovery."
+            exit 0
+          fi
+          curl --fail --silent --show-error \
+            -X POST "$APP_URL/api/v1/internal/cron" \
+            -H "Authorization: Bearer $CRON_SECRET"

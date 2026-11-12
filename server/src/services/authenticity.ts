@@ -274,7 +274,6 @@ export function analyzeJobAuthenticity(
   else if (riskScore <= 70) classification = 'Suspicious';
   else classification = 'High Risk';
 
-  const highIndicators = indicators.filter((indicator) => indicator.severity === 'high');
   const recommendedAction =
     classification === 'High Risk'
       ? 'Do not pay money or share sensitive documents. Verify the employer through its official website and independently contacted HR before proceeding.'

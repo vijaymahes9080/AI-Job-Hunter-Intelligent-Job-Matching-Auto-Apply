@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { BookOpen, ExternalLink, GraduationCap, RefreshCw, Sparkles, Target, TrendingUp } from 'lucide-react';
+import { BookOpen, ExternalLink, GraduationCap, Sparkles, Target, TrendingUp } from 'lucide-react';
 import type { SkillGapResult } from '../../shared/types';
 import { api, errorMessage } from '../lib/api';
 import { useAsync } from '../lib/useAsync';

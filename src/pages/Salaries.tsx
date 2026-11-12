@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { CircleDollarSign, ExternalLink, Info, Search, ShieldCheck } from 'lucide-react';
-import { api, errorMessage } from '../lib/api';
+import { api } from '../lib/api';
 import { formatDate, formatMoney } from '../lib/format';
 import { useAsync } from '../lib/useAsync';
 import { Badge, Button, Card, EmptyState, ErrorNotice, Field, Input, LoadingBlock, PageHeader, SectionTitle, Select, StatCard } from '../components/ui';
