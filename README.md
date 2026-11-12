@@ -77,6 +77,8 @@ This starts PostgreSQL and the app at http://localhost:8787. Change `POSTGRES_PA
 
 ### Render
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/vijaymahes9080/AI-Job-Hunter-Intelligent-Job-Matching-Auto-Apply)
+
 `render.yaml` provisions a PostgreSQL database and a Docker web service. `APP_URL` is derived from Render's `RENDER_EXTERNAL_URL` automatically.
 
 ### Vercel
