@@ -186,12 +186,9 @@ export function parseSalaryText(raw: string | null | undefined): SalaryRange | n
   if (!raw) return null;
   const text = raw.replace(/\u00a0/g, ' ').trim();
   if (!text) return null;
-  const currencySymbol = text.match(/[$€£₹]/)?.[0];
-  const currencyCode = text.match(/\b(USD|INR|EUR|GBP|SGD|AED|CAD|AUD)\b/i)?.[1]?.toUpperCase();
-  const currency = currencyCode || (currencySymbol ? CURRENCY_SYMBOL[currencySymbol] : null);
-  if (!currency) return null;
-  if (/lpa/i.test(text)) {
-    const match = text.match(/(\d+(?:\.\d+)?)\s*(?:-|–|to)\s*(\d+(?:\.\d+)?)\s*lpa/i);
+  // LPA/lakh language is itself explicit INR evidence, even without a symbol.
+  if (/lpa|lakhs?|lac\b/i.test(text)) {
+    const match = text.match(/(\d+(?:\.\d+)?)\s*(?:-|–|to)\s*(\d+(?:\.\d+)?)\s*(?:lpa|lakhs?|lac)/i);
     if (match) {
       return {
         min: Number(match[1]) * 100_000,
@@ -202,7 +199,7 @@ export function parseSalaryText(raw: string | null | undefined): SalaryRange | n
         rawText: text,
       };
     }
-    const single = text.match(/(\d+(?:\.\d+)?)\s*lpa/i);
+    const single = text.match(/(\d+(?:\.\d+)?)\s*(?:lpa|lakhs?|lac)/i);
     if (single)
       return {
         min: Number(single[1]) * 100_000,
@@ -213,6 +210,10 @@ export function parseSalaryText(raw: string | null | undefined): SalaryRange | n
         rawText: text,
       };
   }
+  const currencySymbol = text.match(/[$€£₹]/)?.[0];
+  const currencyCode = text.match(/\b(USD|INR|EUR|GBP|SGD|AED|CAD|AUD)\b/i)?.[1]?.toUpperCase();
+  const currency = currencyCode || (currencySymbol ? CURRENCY_SYMBOL[currencySymbol] : null);
+  if (!currency) return null;
   const range = text.match(
     /([$€£₹]\s?)?(\d[\d,.]*)\s?([kKmM])?\s*(?:-|–|to)\s*([$€£₹]\s?)?(\d[\d,.]*)\s?([kKmM])?/,
   );

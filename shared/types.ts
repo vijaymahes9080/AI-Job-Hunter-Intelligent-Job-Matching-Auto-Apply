@@ -425,7 +425,7 @@ export interface GitHubRepoEvidence {
   updatedAt: string;
   homepage: string | null;
   readmeLength: number;
-  technologies: Array<{ name: string; evidence: string }>;
+  technologies: Array<{ name: string; evidence: string[] }>;
   quality: {
     hasDescription: boolean;
     hasReadme: boolean;

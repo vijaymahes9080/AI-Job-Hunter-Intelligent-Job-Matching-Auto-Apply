@@ -1,4 +1,4 @@
-import type { CandidateProfile, UserSettings } from '../../shared/types.js';
+import type { CandidateProfile, UserSettings } from '../../../shared/types.js';
 import type { Database } from '../db/index.js';
 
 export const EMPTY_PROFILE: Omit<CandidateProfile, 'name' | 'email'> = {

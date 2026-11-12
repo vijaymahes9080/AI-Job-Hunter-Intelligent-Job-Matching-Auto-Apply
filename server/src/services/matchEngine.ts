@@ -172,7 +172,9 @@ export function extractSkillsFromText(text: string): string[] {
   const found = new Set<string>();
   for (const skill of NORMALIZED_DICTIONARY) {
     const escaped = skill.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    const pattern = new RegExp(`(^|[^a-z0-9+#.])${escaped}([^a-z0-9+#.]|$)`, 'i');
+    // Lookarounds keep true boundaries while allowing sentence punctuation such
+    // as “PostgreSQL.” to count as evidence rather than hiding the skill.
+    const pattern = new RegExp(`(?<![a-z0-9+#])${escaped}(?![a-z0-9+#])`, 'i');
     if (pattern.test(haystack)) found.add(skill);
   }
   return [...found];

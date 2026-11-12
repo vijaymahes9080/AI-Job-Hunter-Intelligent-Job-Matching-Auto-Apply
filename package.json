@@ -5,10 +5,19 @@
   "author": "Vijay Mahes <Vijaypradhap2004@gmail.com>",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
+    "dev": "concurrently -n web,api -c cyan,magenta \"npm:dev:web\" \"npm:dev:api\"",
+    "dev:web": "vite",
+    "dev:api": "tsx watch server/src/index.ts",
+    "build": "npm run build:web && npm run build:server",
+    "build:web": "tsc -b && vite build",
+    "build:server": "tsup && node scripts/copy-server-assets.mjs",
+    "start": "node server/dist/index.js",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b && tsc -p server/tsconfig.json --noEmit",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "seed": "node scripts/fetch-seed-jobs.mjs"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -35,6 +44,7 @@
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.10",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/multer": "^2.3.0",

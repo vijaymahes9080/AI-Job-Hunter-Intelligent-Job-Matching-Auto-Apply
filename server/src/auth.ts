@@ -32,7 +32,7 @@ interface TokenPayload {
 
 export function signToken(user: AuthUser): string {
   return jwt.sign({ sub: user.id, email: user.email } satisfies TokenPayload, config.jwtSecret, {
-    expiresIn: config.jwtTtl,
+    expiresIn: 60 * 60 * 24 * 7,
   });
 }
 
